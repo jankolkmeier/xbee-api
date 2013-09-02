@@ -1,0 +1,38 @@
+{
+  "name": "xbee-api",
+  "description": "Node.js communicates with XBee/ZigBee devices in API mode",
+  "version": "0.1.0",
+  "homepage": "https://github.com/jouz/xbee-api",
+  "author": {
+    "name": "Jan Kolkmeier",
+    "email": "jankolkmeier@gmail.com",
+    "url": "http://kolkmeier.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jouz/xbee-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jouz/xbee-api/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/jouz/xbee-api/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "lib/xbee-api",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt nodeunit"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt-contrib-watch": "~0.4.0",
+    "grunt": "~0.4.1"
+  },
+  "keywords": []
+}
