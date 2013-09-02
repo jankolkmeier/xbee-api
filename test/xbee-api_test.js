@@ -45,6 +45,14 @@ exports['TOOLS'] = {
     test.equal(T.bArr2Dec([3,21]), 789);
 
     test.done();
+  },
+  'bArr2HexStr': function(test) {
+    test.expect(1);
+    // given a byte array like [0xff,0xfe], convert to a string representaiton in hex.
+    test.equal(T.bArr2HexStr([0xff,0xfe]), 'fffe');
+
+    test.done();
+
   }
 }
 
