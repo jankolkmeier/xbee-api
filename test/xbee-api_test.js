@@ -36,8 +36,8 @@ exports['TOOLS'] = {
   setUp: function(done) {
     done();
   },
-  tearDown: function (callback) {
-    callback();
+  tearDown: function (done) {
+    done();
   },
   'bArr2Dec': function(test) {
     test.expect(1);
