@@ -186,11 +186,30 @@ exports['API FRAME PARSING AND BUILDING'] = {
     test.done();
   },
   'ZigBee IO Data Sample Rx': function(test) {
-    test.expect(0);
-    // Receive IO Data Sample; 0x92; ...
-    var expected0 = new Buffer([ 0x7E, 0x00, 0x14, 0x92, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x7D, 0x84, 0x01, 0x01, 0x00, 0x1C, 0x02, 0x00, 0x14, 0x02, 0x25, 0xF5 ]);
+    test.expect(6);
+    var xbeeAPI = new xbee_api.XBeeAPI();
+    var parser = xbeeAPI.parser();
+    var dummy = new events.EventEmitter();
 
-    test.done();
+    dummy.on("frame_object", function(frame) {
+      test.equal(frame.remote64, '0013a20040522baa', "Parse remote64");
+      test.equal(frame.remote16, '7d84', "Parse remote16");
+      test.equal(frame.receiveOptions, 1, "Parse receive options");
+      test.equal(frame.numSamples, 1, "Parse number of samples");
+      test.deepEqual(frame.digitalSamples, {
+        "DIO2": 1,
+        "DIO3": 0,
+        "DIO4": 1
+      }, "Parsing digital samples");
+      test.deepEqual(frame.analogSamples, {
+        "AD1": 644
+      }, "Parse analog samples");
+      test.done();
+    });
+
+    // Receive IO Data Sample; 0x92; ...
+    var rawFrame = new Buffer([ 0x7E, 0x00, 0x14, 0x92, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x7D, 0x84, 0x01, 0x01, 0x00, 0x1C, 0x02, 0x00, 0x14, 0x02, 0x25, 0xF5 ]);
+    parser(dummy, Escape(rawFrame));
   },
   'Node Identification Indicator': function(test) {
     test.expect(9);
@@ -199,15 +218,15 @@ exports['API FRAME PARSING AND BUILDING'] = {
     var dummy = new events.EventEmitter();
 
     dummy.on("frame_object", function(frame) {
-      test.equals(frame.sender64, '0013a20040522baa', "Parse sender64");
-      test.equals(frame.sender16, '7d84', "Parse sender16");
-      test.equals(frame.receiveOptions, 2, "Parse receive options");
-      test.equals(frame.remote16, '7d84', "Parse remote16");
-      test.equals(frame.remote64, '0013a20040522baa', "Parse remote64");
-      test.equals(frame.nodeIdentifier, " ", "Parse node identifier");
-      test.equals(frame.remoteParent16, 'fffe', "Parse parent16 ");
-      test.equals(frame.deviceType, 1, "Parse device type");
-      test.equals(frame.sourceEvent, 1, "Parse source event");
+      test.equal(frame.sender64, '0013a20040522baa', "Parse sender64");
+      test.equal(frame.sender16, '7d84', "Parse sender16");
+      test.equal(frame.receiveOptions, 2, "Parse receive options");
+      test.equal(frame.remote16, '7d84', "Parse remote16");
+      test.equal(frame.remote64, '0013a20040522baa', "Parse remote64");
+      test.equal(frame.nodeIdentifier, " ", "Parse node identifier");
+      test.equal(frame.remoteParent16, 'fffe', "Parse parent16 ");
+      test.equal(frame.deviceType, 1, "Parse device type");
+      test.equal(frame.sourceEvent, 1, "Parse source event");
       // digi app profile...
       test.done();
     });
