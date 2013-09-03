@@ -8,6 +8,7 @@
 
 'use strict';
 
+var util = require('util');
 var xbee_api = require('../lib/xbee-api.js');
 var T = require('../lib/tools.js');
 var C = require('../lib/constants.js');
@@ -32,6 +33,30 @@ var C = require('../lib/constants.js');
     test.ifError(value)
 */
 
+exports['MAIN'] = {
+  setUp: function(done) {
+    done();
+  },
+  tearDown: function (done) {
+    done();
+  },
+  'Option passing': function(test) {
+    test.expect(4);
+    var xbeeAPI1 = new xbee_api.XBeeAPI();
+    test.equal(xbeeAPI1.options.api_mode, 1, "Do default options work?");
+
+    var options = { api_mode: 2 };
+    var xbeeAPI2 = new xbee_api.XBeeAPI(options);
+    // given a byte array like [3,21], convert to a decimal value.
+    test.equal(xbeeAPI2.options.api_mode, 2, "Are passed options applied?");
+
+    var xbeeAPI3 = new xbee_api.XBeeAPI();
+    test.equal(xbeeAPI3.options.api_mode, 1, "Are default options left untouched?");
+
+    test.done();
+  },
+};
+
 exports['TOOLS'] = {
   setUp: function(done) {
     done();
@@ -54,7 +79,7 @@ exports['TOOLS'] = {
     test.done();
 
   }
-}
+};
 
 exports['API FRAME PARSING AND BUILDING'] = {
   setUp: function(done) {
