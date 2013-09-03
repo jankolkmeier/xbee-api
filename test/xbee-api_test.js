@@ -9,9 +9,11 @@
 'use strict';
 
 var util = require('util');
+var SerialPort = require('serialport').SerialPort;
 var xbee_api = require('../lib/xbee-api.js');
 var T = require('../lib/tools.js');
 var C = require('../lib/constants.js');
+var events = require('events');
 
 /*
   ======== A Handy Little Nodeunit Reference ========
@@ -41,7 +43,7 @@ exports['MAIN'] = {
     done();
   },
   'Option passing': function(test) {
-    test.expect(4);
+    test.expect(3);
     var xbeeAPI1 = new xbee_api.XBeeAPI();
     test.equal(xbeeAPI1.options.api_mode, 1, "Do default options work?");
 
@@ -56,6 +58,45 @@ exports['MAIN'] = {
     test.done();
   },
 };
+
+exports['PHYSICAL'] = {
+  setUp: function(done) {
+    done();
+  },
+  tearDown: function (done) {
+    done();
+  },
+  'todo': function(test) {
+    /*
+    if (false) {
+      test.expect(1);
+
+      var xbeeAPI = new xbee_api.XBeeAPI({
+        raw_frames: true
+      });
+
+      // TODO: Pass com port option to nodeunit
+      var serialport = new SerialPort("COM13", {
+        baudrate: 57600
+        parser: xbeeAPI.parse
+      });
+
+      serialport.on("open", function() {
+        var query = new Buffer([ 0x7E, 0x00, 0x04, 0x08, 0x52, 0x4E, 0x4A, 0x0D]);
+        serialport.write(, function(err, results) {
+          test.equal(err, null, "Can we write to the port?");
+        });
+      });
+
+      serialport.on("frame_raw"; function(frame) {
+        test.equal(1, 1, "");
+        test.done();
+      });
+    }
+    */
+    test.done();
+  }
+}
 
 exports['TOOLS'] = {
   setUp: function(done) {
@@ -87,9 +128,9 @@ exports['API FRAME PARSING AND BUILDING'] = {
     // AP=1
     done();
   },
-  tearDown: function (callback) {
+  tearDown: function (done) {
     // clean up
-    callback();
+    done();
   },
   'AT Commands': function(test) {
     test.expect(0);
@@ -152,10 +193,42 @@ exports['API FRAME PARSING AND BUILDING'] = {
     test.done();
   },
   'Node Identification Indicator': function(test) {
-    test.expect(0);
-    // Receive IO Data Sample; 0x95; ...
-    var expected0 = new Buffer([ 0x7E, 0x00, 0x20, 0x95, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x7D, 0x84, 0x02, 0x7D, 0x84, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x20, 0x00, 0xFF, 0xFE, 0x01, 0x01, 0xC1, 0x05, 0x10, 0x1E, 0x1B ]);
+    test.expect(9);
+    var xbeeAPI = new xbee_api.XBeeAPI();
+    var parser = xbeeAPI.parser();
+    var dummy = new events.EventEmitter();
 
-    test.done();
+    dummy.on("frame_object", function(frame) {
+      test.equals(frame.sender64, '0013a20040522baa', "Parse sender64");
+      test.equals(frame.sender16, '7d84', "Parse sender16");
+      test.equals(frame.receiveOptions, 2, "Parse receive options");
+      test.equals(frame.remote16, '7d84', "Parse remote16");
+      test.equals(frame.remote64, '0013a20040522baa', "Parse remote64");
+      test.equals(frame.nodeIdentifier, " ", "Parse node identifier");
+      test.equals(frame.remoteParent16, 'fffe', "Parse parent16 ");
+      test.equals(frame.deviceType, 1, "Parse device type");
+      test.equals(frame.sourceEvent, 1, "Parse source event");
+      // digi app profile...
+      test.done();
+    });
+
+    // Receive IO Data Sample; 0x95; ...
+    var rawFrame = new Buffer([ 0x7E, 0x00, 0x20, 0x95, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x7D, 0x84, 0x02, 0x7D, 0x84, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x20, 0x00, 0xFF, 0xFE, 0x01, 0x01, 0xC1, 0x05, 0x10, 0x1E, 0x1B ]);
+    parser(dummy, Escape(rawFrame));
   }
 };
+
+function Escape(buffer) {
+    var packetdata = buffer.toJSON();
+    var res = [packetdata[0]];
+    for (var p = 1; p<packetdata.length; p++) {
+      if (packetdata[p] == C.START_BYTE || 
+          packetdata[p] == C.ESCAPE ||
+          packetdata[p] == C.XOFF ||
+          packetdata[p] == C.XON) {
+        res.push(C.ESCAPE);
+        res.push(packetdata[p] ^ 0x20);
+      } else res.push(packetdata[p]);
+    }
+    return new Buffer(res, 'ascii');
+}
