@@ -37,7 +37,7 @@ exports['Main'] = {
   },
 };
 
-exports['API Frame Building'] = { // These have to be tested both for AP=1 and 2
+exports['API Frame building'] = { // These have to be tested both for AP=1 and 2
   'AT Command Requests': function(test) {
     test.expect(1);
 
@@ -52,7 +52,7 @@ exports['API Frame Building'] = { // These have to be tested both for AP=1 and 2
     var expected0 = new Buffer([ 0x7E, 0x00, 0x04, 0x08, 0x52, 0x4E, 0x4A, 0x0D]);
 
     var xbeeAPI = new xbee_api.XBeeAPI();
-    test.deepEqual(expected0, xbeeAPI.BuildFrame(frame), "create raw frame");
+    test.deepEqual(expected0, xbeeAPI.buildFrame(frame), "create raw frame");
     test.done();
   },
   'AT Command Queue Requests': function(test) {
@@ -69,7 +69,7 @@ exports['API Frame Building'] = { // These have to be tested both for AP=1 and 2
     var expected0 = new Buffer([ 0x7E, 0x00, 0x05, 0x09, 0x01, 0x42, 0x44, 0x07, 0x68]);
 
     var xbeeAPI = new xbee_api.XBeeAPI();
-    test.deepEqual(expected0, xbeeAPI.BuildFrame(frame), "create raw frame");
+    test.deepEqual(expected0, xbeeAPI.buildFrame(frame), "create raw frame");
     test.done();
   },
   'AT Remote Command Requests': function(test) {
@@ -89,7 +89,7 @@ exports['API Frame Building'] = { // These have to be tested both for AP=1 and 2
     var expected0 = new Buffer([ 0x7E, 0x00, 0x10, 0x17, 0x01, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x40, 0x11, 0x22, 0xFF, 0xFE, 0x02, 0x42, 0x48, 0x01, 0xF5]);
 
     var xbeeAPI = new xbee_api.XBeeAPI();
-    test.deepEqual(expected0, xbeeAPI.BuildFrame(frame), "create raw frame");
+    test.deepEqual(expected0, xbeeAPI.buildFrame(frame), "create raw frame");
     test.done();
   },
   'Transmit Requests': function(test) {
@@ -109,7 +109,7 @@ exports['API Frame Building'] = { // These have to be tested both for AP=1 and 2
     var expected0 = new Buffer([ 0x7E, 0x00, 0x16, 0x10, 0x01, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x0A, 0x01, 0x27, 0xFF, 0xFE, 0x00, 0x00, 0x54, 0x78, 0x44, 0x61, 0x74, 0x61, 0x30, 0x41, 0x13 ]);
 
     var xbeeAPI = new xbee_api.XBeeAPI();
-    test.deepEqual(expected0, xbeeAPI.BuildFrame(frame), "create raw frame");
+    test.deepEqual(expected0, xbeeAPI.buildFrame(frame), "create raw frame");
     test.done();
   }
 }
