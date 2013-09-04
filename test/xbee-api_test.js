@@ -9,9 +9,7 @@
 'use strict';
 
 var util = require('util');
-var SerialPort = require('serialport').SerialPort;
 var xbee_api = require('../lib/xbee-api.js');
-var T = require('../lib/tools.js');
 var C = require('../lib/constants.js');
 var events = require('events');
 
@@ -35,7 +33,7 @@ var events = require('events');
     test.ifError(value)
 */
 
-exports['MAIN'] = {
+exports['Main'] = {
   setUp: function(done) {
     done();
   },
@@ -59,92 +57,83 @@ exports['MAIN'] = {
   },
 };
 
-exports['PHYSICAL'] = {
-  setUp: function(done) {
-    done();
-  },
-  tearDown: function (done) {
-    done();
-  },
-  'todo': function(test) {
-    /*
-    if (false) {
-      test.expect(1);
-
-      var xbeeAPI = new xbee_api.XBeeAPI({
-        raw_frames: true
-      });
-
-      // TODO: Pass com port option to nodeunit
-      var serialport = new SerialPort("COM13", {
-        baudrate: 57600
-        parser: xbeeAPI.parse
-      });
-
-      serialport.on("open", function() {
-        var query = new Buffer([ 0x7E, 0x00, 0x04, 0x08, 0x52, 0x4E, 0x4A, 0x0D]);
-        serialport.write(, function(err, results) {
-          test.equal(err, null, "Can we write to the port?");
-        });
-      });
-
-      serialport.on("frame_raw"; function(frame) {
-        test.equal(1, 1, "");
-        test.done();
-      });
-    }
-    */
-    test.done();
-  }
-}
-
-exports['TOOLS'] = {
-  setUp: function(done) {
-    done();
-  },
-  tearDown: function (done) {
-    done();
-  },
-  'bArr2Dec': function(test) {
-    test.expect(1);
-    // given a byte array like [3,21], convert to a decimal value.
-    test.equal(T.bArr2Dec([3,21]), 789);
-
-    test.done();
-  },
-  'bArr2HexStr': function(test) {
-    test.expect(1);
-    // given a byte array like [0xff,0xfe], convert to a string representaiton in hex.
-    test.equal(T.bArr2HexStr([0xff,0xfe]), 'fffe');
-
-    test.done();
-
-  }
-};
-
 exports['API Frame Building'] = { // These have to be tested both for AP=1 and 2
   'AT Command Requests': function(test) {
-    test.expect(0);
+    test.expect(1);
+
+    var frame = {
+      type: C.FRAME_TYPE.AT_COMMAND,
+      id: 0x52,
+      command: "NJ",
+      commandParameter: [],
+    };
+
     // AT Command; 0x08; Queries ATNJ
     var expected0 = new Buffer([ 0x7E, 0x00, 0x04, 0x08, 0x52, 0x4E, 0x4A, 0x0D]);
 
-    // AT Command - Queue Param. Value; 0x09; Queues ATBD7
-    var expected1 = new Buffer([ 0x7E, 0x00, 0x05, 0x09, 0x01, 0x42, 0x44, 0x07, 0x68]);
-    
-    // Remote AT Command Req.; 0x17; ATBH1
-    var expected2 = new Buffer([ 0x7E, 0x00, 0x10, 0x17, 0x01, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x40, 0x11, 0x22, 0xFF, 0xFE, 0x02, 0x42, 0x48, 0x01, 0xF5]);
+    var xbeeAPI = new xbee_api.XBeeAPI();
+    test.deepEqual(expected0, xbeeAPI.BuildFrame(frame), "create raw frame");
+    test.done();
+  },
+  'AT Command Queue Requests': function(test) {
+    test.expect(1);
 
-    //test.equal(XBee_api...(), 'value', 'Should be value');
+    var frame = {
+      type: C.FRAME_TYPE.AT_COMMAND_QUEUE_PARAMETER_VALUE,
+      id: 0x01,
+      command: "BD",
+      commandParameter: [ 0x07 ]
+    };
+
+    // AT Command - Queue Param. Value; 0x09; Queues ATBD7
+    var expected0 = new Buffer([ 0x7E, 0x00, 0x05, 0x09, 0x01, 0x42, 0x44, 0x07, 0x68]);
+
+    var xbeeAPI = new xbee_api.XBeeAPI();
+    test.deepEqual(expected0, xbeeAPI.BuildFrame(frame), "create raw frame");
+    test.done();
+  },
+  'AT Remote Command Requests': function(test) {
+    test.expect(1);
+    
+    var frame = {
+      type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+      id: 0x01,
+      destination64: "0013a20040401122",
+      destination16: "fffe",
+      remoteCommandOptions: 0x02,
+      command: "BH",
+      commandParameter: [ 0x01 ]
+    };
+
+    // Remote AT Command Req.; 0x17; ATBH1
+    var expected0 = new Buffer([ 0x7E, 0x00, 0x10, 0x17, 0x01, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x40, 0x11, 0x22, 0xFF, 0xFE, 0x02, 0x42, 0x48, 0x01, 0xF5]);
+
+    var xbeeAPI = new xbee_api.XBeeAPI();
+    test.deepEqual(expected0, xbeeAPI.BuildFrame(frame), "create raw frame");
     test.done();
   },
   'Transmit Requests': function(test) {
-    test.expect(0);
-    // Transmit request; 0x10; sends chars: TxData1B (AP=1)
-    var expected0 = new Buffer([ 0x7E, 0x00, 0x16, 0x10, 0x01, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x0A, 0x01, 0x27, 0xFF, 0xFE, 0x00, 0x00, 0x00, 0x54, 0x78, 0x44, 0x61, 0x74, 0x61, 0x30, 0x41, 0x13 ]);
+    test.expect(1);
     
+    var frame = {
+      type: C.FRAME_TYPE.ZIGBEE_TRANSMIT_REQUEST,
+      id: 0x01,
+      destination64: "0013a200400a0127",
+      destination16: "fffe",
+      broadcastRadius: 0x00,
+      options: 0x00,
+      data: "TxData0A"
+    };
+
+    // Transmit request; 0x10; sends chars: TxData1B (AP=1)
+    var expected0 = new Buffer([ 0x7E, 0x00, 0x16, 0x10, 0x01, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x0A, 0x01, 0x27, 0xFF, 0xFE, 0x00, 0x00, 0x54, 0x78, 0x44, 0x61, 0x74, 0x61, 0x30, 0x41, 0x13 ]);
+
+    var xbeeAPI = new xbee_api.XBeeAPI();
+    test.deepEqual(expected0, xbeeAPI.BuildFrame(frame), "create raw frame");
     test.done();
   }
 }
+
 
 exports['API Frame Parsing'] = {
   'AT Remote Command Responses': function(test) {
@@ -281,8 +270,7 @@ exports['API Frame Parsing'] = {
   }
 };
 
-function Escape(buffer) {
-    var packetdata = buffer.toJSON();
+function Escape(packetdata) {
     var res = [packetdata[0]];
     for (var p = 1; p<packetdata.length; p++) {
       if (packetdata[p] == C.START_BYTE || 
