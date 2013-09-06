@@ -255,7 +255,7 @@ C.DEVICE_TYPE.END_DEVICE // 0x02
 C.DEVICE_TYPE[0x02] // "End Device (0x02)"
 ```
 
-Please refer to `lib/constants.js` for a complete list.
+Please refer to `lib/constants.js` for a complete list, and the module documentation [here](http://ftp1.digi.com/support/documentation/90000976_M.pdf "http://ftp1.digi.com/support/documentation/90000976_M.pdf") for more explanation.
 
 ## EXAMPLES
 To combine with [serialport](https://github.com/voodootikigod/node-serialport/), we use the rawParser(). Make sure to set your baudrate, AP mode and COM port. 
