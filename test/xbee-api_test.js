@@ -154,12 +154,13 @@ exports['API Frame Parsing'] = {
     parser(dummy, rawFrame);
   },
   'Transmit Status': function(test) {
-    test.expect(4);
+    test.expect(5);
     var xbeeAPI = new xbee_api.XBeeAPI();
     var parser = xbeeAPI.rawParser();
     var dummy = new events.EventEmitter();
     dummy.once("frame_object", function(frame) {
       test.equal(frame.remote16, "7d84", "Parse remote16");
+      test.equal(frame.id, 0x01, "Parse id");
       test.equal(frame.transmitRetryCount, 0, "Parse retry count");
       test.equal(frame.deliveryStatus, 0, "Parse delivery status");
       test.equal(frame.discoveryStatus, 1, "Parse discovery status");
@@ -175,7 +176,7 @@ exports['API Frame Parsing'] = {
     var parser = xbeeAPI.rawParser();
     var dummy = new events.EventEmitter();
     dummy.once("frame_object", function(frame) {
-      test.equal(frame.status, 6, "Parse status");
+      test.equal(frame.modemStatus, 6, "Parse status");
       test.done();
     });
     // Modem status; 0x8A; Coordinator Started
