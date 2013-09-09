@@ -8,7 +8,7 @@ var xbeeAPI = new xbee_api.XBeeAPI({
   api_mode: 1
 });
 
-var serialport = new SerialPort("COM19", {
+var serialport = new SerialPort("COM6", {
   baudrate: 57600,
   parser: xbeeAPI.rawParser()
 });
@@ -28,6 +28,6 @@ serialport.on("open", function() {
 });
 
 
-serialport.on("frame_object", function(frame) {
+xbeeAPI.on("frame_object", function(frame) {
   console.log("OBJ> "+util.inspect(frame));
 });

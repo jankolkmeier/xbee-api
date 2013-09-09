@@ -60,7 +60,13 @@ Returns an API frame (buffer) created from the passed frame object. See ***Creat
 Parses and returns a frame object from the buffer passed. Note that the buffer must be a complete frame, starting with the start byte and ending with the checksum byte. See ***Objects created from received API Frames*** for details on how the retured objects are specified.
 
 #### xbeeAPI.rawParser()
-Returns a parser function with the profile `function(emitter, buffer) {}`. This can be passed to a serial reader such as serialport.
+Returns a parser function with the profile `function(emitter, buffer) {}`. This can be passed to a serial reader such as serialport. Note that XBeeAPI will not use the emitter to emit a parsed frame, but it's own emitter (see Event: 'frame_object').
+
+#### xbeeAPI.parseRaw(buffer)
+Parses data in the buffer, assumes it is comming directly from the XBee. If a complete frame is collected, it is emitted as Event: 'frame_object'.
+
+#### Event: 'frame_object'
+Is emitted whenever a complete frame is collected and parsed.
 
 #### xbeeAPI.nextFrameId()
 Increments the internal `frameId` counter and returns it. Useful for building requests where we want to identify the respective response frame later on.
@@ -286,7 +292,7 @@ serialport.on("open", function() {
 });
 
 // All frames parsed by the XBee will be emitted here
-serialport.on("frame_object", function(frame) {
+xbeeAPI.on("frame_object", function(frame) {
 	console.log(">>", frame);
 });
 ```
@@ -306,7 +312,7 @@ var frame_obj = {
 serialport.write(xbeeAPI.buildFrame(frame_obj));
 
 // All frames parsed by the XBee will be emitted here
-serialport.on("frame_object", function(frame) {
+xbeeAPI.on("frame_object", function(frame) {
 	if (frame.id == frameId &&
 	    frame.type == C.FRAME_TYPE.AT_COMMAND_RESPONSE) {
 		// This frame is definitely the response!

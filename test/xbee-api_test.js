@@ -120,9 +120,8 @@ exports['API Frame Parsing'] = {
     test.expect(6);
     var xbeeAPI = new xbee_api.XBeeAPI();
     var parser = xbeeAPI.rawParser();
-    var dummy = new events.EventEmitter();
 
-    dummy.once("frame_object", function(frame) { // frame1
+    xbeeAPI.once("frame_object", function(frame) { // frame1
       test.equal(frame.id, 0x55, "Parse frameid");
       test.equal(frame.remote64, '0013a20040522baa', "Parse remote64");
       test.equal(frame.remote16, '7d84', "Parse remote16");
@@ -134,15 +133,14 @@ exports['API Frame Parsing'] = {
 
     // Remote Command Response; 0x97; ATSL [OK] 40522BAA
     var rawFrame = new Buffer([ 0x7E, 0x00, 0x13, 0x97, 0x55, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x7D, 0x84, 0x53, 0x4C, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0xF0 ]);
-    parser(dummy, rawFrame);
+    parser(null, rawFrame);
   },
   'AT Command Responses': function(test) {
     test.expect(3);
     var xbeeAPI = new xbee_api.XBeeAPI();
     var parser = xbeeAPI.rawParser();
-    var dummy = new events.EventEmitter();
 
-    dummy.once("frame_object", function(frame) { // frame0
+    xbeeAPI.once("frame_object", function(frame) { // frame0
       test.equal(frame.id, 0x01, "Parse frameid");
       test.equal(frame.command, "BD", "Parse command");
       test.equal(frame.commandStatus, 0, "Parse command status");
@@ -151,14 +149,13 @@ exports['API Frame Parsing'] = {
 
     // AT Command Response; 0x88; ATBD [OK] (no data)
     var rawFrame = new Buffer([ 0x7E, 0x00, 0x05, 0x88, 0x01, 0x42, 0x44, 0x00, 0xF0 ]);
-    parser(dummy, rawFrame);
+    parser(null, rawFrame);
   },
   'Transmit Status': function(test) {
     test.expect(5);
     var xbeeAPI = new xbee_api.XBeeAPI();
     var parser = xbeeAPI.rawParser();
-    var dummy = new events.EventEmitter();
-    dummy.once("frame_object", function(frame) {
+    xbeeAPI.once("frame_object", function(frame) {
       test.equal(frame.remote16, "7d84", "Parse remote16");
       test.equal(frame.id, 0x01, "Parse id");
       test.equal(frame.transmitRetryCount, 0, "Parse retry count");
@@ -168,27 +165,25 @@ exports['API Frame Parsing'] = {
     });
     // ZigBee Transmit Status; 0x8B; 0 retransmit, Success, Address Discovery
     var rawFrame = new Buffer([ 0x7E, 0x00, 0x07, 0x8B, 0x01, 0x7D, 0x84, 0x00, 0x00, 0x01, 0x71 ]);
-    parser(dummy, rawFrame);
+    parser(null, rawFrame);
   },
   'Modem Status': function(test) {
     test.expect(1);
     var xbeeAPI = new xbee_api.XBeeAPI();
     var parser = xbeeAPI.rawParser();
-    var dummy = new events.EventEmitter();
-    dummy.once("frame_object", function(frame) {
+    xbeeAPI.once("frame_object", function(frame) {
       test.equal(frame.modemStatus, 6, "Parse status");
       test.done();
     });
     // Modem status; 0x8A; Coordinator Started
     var rawFrame = new Buffer([ 0x7E, 0x00, 0x02, 0x8A, 0x06, 0x6F ]);
-    parser(dummy, rawFrame);
+    parser(null, rawFrame);
   }, 
   'Receive Packet': function(test) {
     test.expect(4);
     var xbeeAPI = new xbee_api.XBeeAPI();
     var parser = xbeeAPI.rawParser();
-    var dummy = new events.EventEmitter();
-    dummy.once("frame_object", function(frame) {
+    xbeeAPI.once("frame_object", function(frame) {
       test.equal(frame.remote64, '0013a20040522baa', "Parse remote64");
       test.equal(frame.remote16, '7d84', "Parse remote16");
       test.equal(frame.receiveOptions, 1, "Parse receive options");
@@ -197,15 +192,14 @@ exports['API Frame Parsing'] = {
     });
     // Receive Packet; 0x90; Receive packet with chars RxData
     var rawFrame = new Buffer([ 0x7E, 0x00, 0x12, 0x90, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x7D, 0x84, 0x01, 0x52, 0x78, 0x44, 0x61, 0x74, 0x61, 0x0D ]);
-    parser(dummy, rawFrame);
+    parser(null, rawFrame);
   },
   'ZigBee IO Data Sample Rx': function(test) {
     test.expect(6);
     var xbeeAPI = new xbee_api.XBeeAPI();
     var parser = xbeeAPI.rawParser();
-    var dummy = new events.EventEmitter();
 
-    dummy.once("frame_object", function(frame) {
+    xbeeAPI.once("frame_object", function(frame) {
       test.equal(frame.remote64, '0013a20040522baa', "Parse remote64");
       test.equal(frame.remote16, '7d84', "Parse remote16");
       test.equal(frame.receiveOptions, 1, "Parse receive options");
@@ -223,15 +217,14 @@ exports['API Frame Parsing'] = {
 
     // Receive IO Data Sample; 0x92; ...
     var rawFrame = new Buffer([ 0x7E, 0x00, 0x14, 0x92, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x7D, 0x84, 0x01, 0x01, 0x00, 0x1C, 0x02, 0x00, 0x14, 0x02, 0x25, 0xF5 ]);
-    parser(dummy, rawFrame);
+    parser(null, rawFrame);
   },
   'Node Identification Indicator': function(test) {
     test.expect(9);
     var xbeeAPI = new xbee_api.XBeeAPI();
     var parser = xbeeAPI.rawParser();
-    var dummy = new events.EventEmitter();
 
-    dummy.once("frame_object", function(frame) {
+    xbeeAPI.once("frame_object", function(frame) {
       test.equal(frame.sender64, '0013a20040522baa', "Parse sender64");
       test.equal(frame.sender16, '7d84', "Parse sender16");
       test.equal(frame.receiveOptions, 2, "Parse receive options");
@@ -247,6 +240,6 @@ exports['API Frame Parsing'] = {
 
     // Receive IO Data Sample; 0x95; ...
     var rawFrame = new Buffer([ 0x7E, 0x00, 0x20, 0x95, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x7D, 0x84, 0x02, 0x7D, 0x84, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x20, 0x00, 0xFF, 0xFE, 0x01, 0x01, 0xC1, 0x05, 0x10, 0x1E, 0x1B ]);
-    parser(dummy, rawFrame);
+    parser(null, rawFrame);
   }
 };
