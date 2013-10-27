@@ -8,16 +8,16 @@ var xbeeAPI = new xbee_api.XBeeAPI({
   api_mode: 1
 });
 
-var serialport = new SerialPort("COM6", {
+var serialport = new SerialPort("COM5", {
   baudrate: 57600,
   parser: xbeeAPI.rawParser()
 });
 
 serialport.on("open", function() {
-  console.log("Serial port open... sending ATNJ");
+  console.log("Serial port open... sending ATND");
   var frame = {
     type: C.FRAME_TYPE.AT_COMMAND,
-    command: "NI",
+    command: "ND",
     commandParameter: [],
   };
 
