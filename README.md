@@ -124,6 +124,31 @@ Behaves just as AT Command Requests, with additional `destination64/16` paramete
 ```
 Transmit your own `data` to a remote node.
 
+
+#### 0x00: Series 1 Transmit Request 64
+```javascript
+{
+	type: 0x00,
+	id: 0x01, // optional, nextFrameId() is called per default
+	destination64: "0013a200400a0127",
+	options: 0x00, // optional, 0x00 is default
+	data: "TxData0A" // Can either be string or byte array.
+}
+```
+Transmit your own `data` to a remote node using a 64 bit address. This is for Series 1 / 802.15.4 modules only!
+
+#### 0x01: Series 1 Transmit Request 16 
+```javascript
+{
+	type: 0x01,
+	id: 0x01, // optional, nextFrameId() is called per default
+	destination16: "ab00",
+	options: 0x00, // optional, 0x00 is default
+	data: "TxData0A" // Can either be string or byte array.
+}
+```
+Transmit your own `data` to a remote node using a 16 bit address. This is for Series 1 / 802.15.4 modules only!
+
 ### Objects created from received API Frames
 Objects created from API frames that the XBee would recieve contain a `type` property that identifies the frame type. If the frame is a response to a query made earlier, the `id` that was used for that request is also included.
 
@@ -224,6 +249,55 @@ An I/O data sample that contains information about the state of the digital and 
 }
 ```
 Modules with the `JN` (Join Notification) parameter enabled will transmit a broadcast Node Identification Indicator packet on power up and when joining. This can also be sent when the D0 button is pressed. Which of these events occurred is set in the `sourceEvent` property. `sender64/16` here is the one from who the packet was received, whereas `remote64/16` is the identified node itself (may be the same).
+
+#### 0x80: Series 1 Receive Packet 64
+```javascript
+{
+	type: 0x80,
+	remote64: "0013a20040522baa",
+  rssi: 0x3f
+	receiveOptions: 0x01,
+	data: [ 0x52, 0x78, 0x44, 0x61, 0x74, 0x61 ]
+}
+```
+This frame contains general data (such as text data) received from remote nodes(64 bit address). This is received only from Series 1 / 802.15.4 hardware.
+
+#### 0x81: Series 1 Receive Packet 16
+```javascript
+{
+	type: 0x81,
+	remote64: "522b",
+  rssi: 0x3f
+	receiveOptions: 0x01,
+	data: [ 0x52, 0x78, 0x44, 0x61, 0x74, 0x61 ]
+}
+```
+This frame contains general data (such as text data) received from remote nodes(16 bit address). This is received only from Series 1 / 802.15.4 hardware.
+
+#### 0x82: Series 1 Receive Packet 64
+```javascript
+{
+	type: 0x82,
+	remote64: "0013a20040522baa",
+  rssi: 0x3f
+	receiveOptions: 0x01,
+	data: [ 0x52, 0x78, 0x44, 0x61, 0x74, 0x61 ]
+}
+```
+This frame contains I/O data received from remote nodes (64 bit address). This is received only from Series 1 / 802.15.4 hardware.
+
+#### 0x83: Series 1 Receive Packet 16
+```javascript
+{
+	type: 0x83,
+	remote64: "522b",
+  rssi: 0x3f
+	receiveOptions: 0x01,
+	data: [ 0x52, 0x78, 0x44, 0x61, 0x74, 0x61 ]
+}
+```
+This frame contains I/O data received from remote nodes (16 bit address). This is received only from Series 1 / 802.15.4 hardware.
+
 
 ### Constants
 You don't have to remember the hex-numbers of the frame types, command options, status types, etc. Everything is defined in two-way constants. See the examples below:
