@@ -110,7 +110,7 @@ Pretty much the same as AT Command Requests, except that the commands are queued
 ```
 Behaves just as AT Command Requests, with additional `destination64/16` parameters set to the remote node on which the AT command is to be executed.
 
-#### 0x10: Transmit Request
+#### 0x10: Series 2 (ZigBee) Transmit Request
 ```javascript
 {
 	type: 0x10,
@@ -125,7 +125,7 @@ Behaves just as AT Command Requests, with additional `destination64/16` paramete
 Transmit your own `data` to a remote node.
 
 
-#### 0x00: Series 1 Transmit Request 64
+#### 0x00: Series 1 (802.15.4) Transmit Request 64
 ```javascript
 {
 	type: 0x00,
@@ -137,7 +137,7 @@ Transmit your own `data` to a remote node.
 ```
 Transmit your own `data` to a remote node using a 64 bit address. This is for Series 1 / 802.15.4 modules only!
 
-#### 0x01: Series 1 Transmit Request 16 
+#### 0x01: Series 1 (802.15.4) Transmit Request 16 
 ```javascript
 {
 	type: 0x01,
@@ -179,7 +179,7 @@ This is a response to a AT command request, for example to query or change an AT
 This is a response to a *remote* AT command request, for example to query or change an AT parameter value on another device in the network. This seems to be a response from the node with the address `0013a20040522baa`. The requested command was, in this case, `SL`. The command status `0` means `OK`.
 
 
-#### 0x8b: Transmit Status
+#### 0x8b: Series 2 (ZigBee) Transmit Status
 ```javascript
 {
 	type: 0x8b,
@@ -201,7 +201,7 @@ This status is received after sending out a transmit request to the XBee (i.e. t
 ```
 These statuses give information about the general operation of the XBee. See the [Constants]() section for more.
 
-#### 0x90: Receive Packet
+#### 0x90: Series 2 (ZigBee) Receive Packet
 ```javascript
 {
 	type: 0x90,
@@ -213,7 +213,7 @@ These statuses give information about the general operation of the XBee. See the
 ```
 This frame contains general data (such as text data) received from remote nodes.
 
-#### 0x92: ZigBee IO Data Sample Rx
+#### 0x92: Series 2 (ZigBee) IO Data Sample Rx
 ```javascript
 {
 	type: 0x92,
@@ -233,7 +233,7 @@ This frame contains general data (such as text data) received from remote nodes.
 ```
 An I/O data sample that contains information about the state of the digital and analog I/O pins that are set to sample data. Here, pins `DIO2` & `DIO4` read `HIGH`, `DIO3` reads `LOW`, and `AD1` samples an analog voltage of `644mV`.
 
-#### 0x95: Node Identification Indicator
+#### 0x95: Series 2 (ZigBee) Node Identification Indicator
 ```javascript
 {
 	type: 0x95,
@@ -250,7 +250,7 @@ An I/O data sample that contains information about the state of the digital and 
 ```
 Modules with the `JN` (Join Notification) parameter enabled will transmit a broadcast Node Identification Indicator packet on power up and when joining. This can also be sent when the D0 button is pressed. Which of these events occurred is set in the `sourceEvent` property. `sender64/16` here is the one from who the packet was received, whereas `remote64/16` is the identified node itself (may be the same).
 
-#### 0x80: Series 1 Receive Packet 64
+#### 0x80: Series 1 (802.15.4) Receive Packet 64
 ```javascript
 {
 	type: 0x80,
@@ -262,7 +262,7 @@ Modules with the `JN` (Join Notification) parameter enabled will transmit a broa
 ```
 This frame contains general data (such as text data) received from remote nodes(64 bit address). This is received only from Series 1 / 802.15.4 hardware.
 
-#### 0x81: Series 1 Receive Packet 16
+#### 0x81: Series 1 (802.15.4) Receive Packet 16
 ```javascript
 {
 	type: 0x81,
@@ -274,7 +274,7 @@ This frame contains general data (such as text data) received from remote nodes(
 ```
 This frame contains general data (such as text data) received from remote nodes(16 bit address). This is received only from Series 1 / 802.15.4 hardware.
 
-#### 0x82: Series 1 Receive Packet 64
+#### 0x82: Series 1 (802.15.4) Receive Packet 64
 ```javascript
 {
 	type: 0x82,
@@ -286,7 +286,7 @@ This frame contains general data (such as text data) received from remote nodes(
 ```
 This frame contains I/O data received from remote nodes (64 bit address). This is received only from Series 1 / 802.15.4 hardware.
 
-#### 0x83: Series 1 Receive Packet 16
+#### 0x83: Series 1 (802.15.4) Receive Packet 16
 ```javascript
 {
 	type: 0x83,
@@ -404,10 +404,13 @@ See the [examples folder](https://github.com/jouz/xbee-api/tree/master/examples)
 Feel free to send a pull request. There are nodeunit test in the `test/` folder.
 
 ## SUPPORTED XBEE MODELS
-Both ZNet 2.5 and ZIGBEE modules should be supported. Since ZIGBEE offers more features and is more robust, you might be interested in upgrading your modules from ZNet 2.5 to ZIGBEE: [upgradingfromznettozb.pdf](ftp://ftp1.digi.com/support/documentation/upgradingfromznettozb.pdf).  
-Development is done using Series 2 XBee modules with XB24-ZB (ZIGBEE) firmware. In specific, this document is used as reference: [90000976_M.pdf](http://ftp1.digi.com/support/documentation/90000976_M.pdf "http://ftp1.digi.com/support/documentation/90000976_M.pdf").
+Both Series 1 (802.15.4) and Series 2 (ZNet 2.5 and ZIGBEE) modules are supported now.
+Since ZIGBEE offers more features and is more robust, you might be interested in upgrading your Series 2 modules from ZNet 2.5 to ZIGBEE: [upgradingfromznettozb.pdf](ftp://ftp1.digi.com/support/documentation/upgradingfromznettozb.pdf).  
+Development is done using Series 2 XBee modules with XB24-ZB (ZIGBEE) firmware. These documents are used as reference: [90000976_M.pdf (for Series 2)](http://ftp1.digi.com/support/documentation/90000976_M.pdf) and 
+[90000982_M.pdf (for Series 1)](http://ftp1.digi.com/support/documentation/90000982_M.pdf). Some frame types are Series 1/2 specific. Be sure to use the correct ones for your module (as described in the documents and in the frame types section).
 
-Modules must run in API mode. Both AP=1 and AP=2 modes are supported.
+
+Modules must run in API mode. Both AP=1 and AP=2 modes are supported (set the api_mode parameter accordingly).
 
 ## LICENSE
 Copyright (c) 2013 Jan Kolkmeier  
