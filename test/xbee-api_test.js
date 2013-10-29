@@ -241,5 +241,53 @@ exports['API Frame Parsing'] = {
     // Receive IO Data Sample; 0x95; ...
     var rawFrame = new Buffer([ 0x7E, 0x00, 0x20, 0x95, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x7D, 0x84, 0x02, 0x7D, 0x84, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x20, 0x00, 0xFF, 0xFE, 0x01, 0x01, 0xC1, 0x05, 0x10, 0x1E, 0x1B ]);
     parser(null, rawFrame);
+  },
+  'Escaping (AP=2)': function(test) {
+    test.expect(6); // 6 frames should be parsed
+    var xbeeAPI = new xbee_api.XBeeAPI({ api_mode: 2 });
+    var parser = xbeeAPI.rawParser();
+    var parsed = 0;
+
+    xbeeAPI.on("frame_object", function(frame) {
+      if (parsed == 0) {
+        test.equal(frame.id, 0x7D, "Parse id");
+      } else if (parsed == 1) {
+        test.equal(frame.id, 0x7E, "Parse id");
+      } else if (parsed == 2) {
+        test.equal(frame.id, 0x62, "Parse id");
+      } else if (parsed == 3) {
+        test.equal(frame.id, 0x64, "Parse id");
+      } else if (parsed == 4) {
+        test.equal(frame.id, 0x65, "Parse id");
+      } else if (parsed == 5) {
+        test.equal(frame.id, 0x66, "Parse id");
+        test.done();
+      }
+      parsed++;
+    });
+    
+    // ZigBee Transmit Status; 0x8B; here, frameId happens to be 7D and needs to be escaped
+    var rawFrame0 = new Buffer([ 0x7e, 0x0, 0x7, 0x8b, 0x7d, 0x5d, 0x2a, 0x6a, 0x0, 0x0, 0x0, 0x63 ]);
+    parser(null, rawFrame0);
+
+    // ZigBee Transmit Status; 0x8B; here, frameId happens to be 7E and needs to be escaped
+    var rawFrame1 = new Buffer([ 0x7e, 0x0, 0x7, 0x8b, 0x7d, 0x5e, 0x2a, 0x6a, 0x0, 0x0, 0x0, 0x62 ]);
+    parser(null, rawFrame1);
+
+    // ZigBee Transmit Status; 0x8B; here, checksum happebs to be 7E and needs to be escaped (frameId 62)
+    var rawFrame2 = new Buffer([ 0x7e, 0x0, 0x7, 0x8b, 0x62, 0x2a, 0x6a, 0x0, 0x0, 0x0, 0x7d, 0x5e ]);
+    parser(null, rawFrame2);
+
+    // ZigBee Transmit Status; 0x8B; some frames without escaping (frameId = 0x64)
+    var rawFrame3 = new Buffer([ 0x7e, 0x0, 0x7, 0x8b, 0x64, 0x2a, 0x6a, 0x0, 0x0, 0x0, 0x7c ]);
+    parser(null, rawFrame3);
+
+    // ZigBee Transmit Status; 0x8B; some frames without escaping (frameId = 0x65)
+    var rawFrame4 = new Buffer([ 0x7e, 0x0, 0x7, 0x8b, 0x65, 0x2a, 0x6a, 0x0, 0x0, 0x0, 0x7b ]);
+    parser(null, rawFrame4);
+
+    // ZigBee Transmit Status; 0x8B; some frames without escaping (frameId = 0x66)
+    var rawFrame5 = new Buffer([ 0x7e, 0x0, 0x7, 0x8b, 0x66, 0x2a, 0x6a, 0x0, 0x0, 0x0, 0x7a ]);
+    parser(null, rawFrame5);
   }
 };
