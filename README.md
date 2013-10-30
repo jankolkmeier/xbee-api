@@ -40,12 +40,12 @@ console.log(xbeeAPI.parseFrame(raw_frame));
 ```
 
 ## SUPPORTED XBEE MODELS
-Both Series 1 (802.15.4) and Series 2 (ZNet 2.5 and ZigBee) modules are supported now.
-Since ZigBee offers more features and is more robust, you might be interested in upgrading your Series 2 modules from ZNet 2.5 to ZigBee: [upgradingfromznettozb.pdf](ftp://ftp1.digi.com/support/documentation/upgradingfromznettozb.pdf).  
-Development is done using Series 2 XBee modules with XB24-ZB (ZigBee) firmware. These documents are used as reference: [90000976_M.pdf (for Series 2)](http://ftp1.digi.com/support/documentation/90000976_M.pdf) and 
-[90000982_M.pdf (for Series 1)](http://ftp1.digi.com/support/documentation/90000982_M.pdf). Some frame types are Series 1/2 specific. Be sure to use the correct ones for your module (as described in the documents and in the frame types section).
+Both Series 1 (802.15.4) and Series 2 (ZNet 2.5 and ZigBee) modules are supported now. These documents are used as reference: [90000976_M.pdf (for Series 2)](http://ftp1.digi.com/support/documentation/90000976_M.pdf) and 
+[90000982_M.pdf (for Series 1)](http://ftp1.digi.com/support/documentation/90000982_M.pdf). Some frame types are 802.15.4, ZNet or ZigBee specific. Be sure to use the correct ones for your module (as described in the documents and the list below). Also check out this [utility from Digi](http://ftp1.digi.com/support/utilities/digi_apiframes2.htm).
 
 Modules must run in API mode. Both AP=1 and AP=2 modes are supported (set the api_mode parameter accordingly).
+
+Since ZigBee is more robust and offers more features than ZNet (none of which are yet implemented here, though!), you might be interested in upgrading your Series 2 modules from ZNet 2.5 to ZigBee: [upgradingfromznettozb.pdf](ftp://ftp1.digi.com/support/documentation/upgradingfromznettozb.pdf).  
 
 ## SUPPORTED FRAME TYPES
 The following frame types are implemented:
@@ -69,7 +69,7 @@ The following frame types are implemented:
 - 0x92: ZigBee IO Data Sample Rx Indicator (ZNet, ZigBee)
 - 0x95: Node Identification Indicator (AO=0) (ZNet, ZigBee)
 
-### NOT IMPLEMENTED
+### NOT IMPLEMENTED YET
 These frame types have yet to be implemented (open an issue if you need one in particular): 
 
 - 0x11: Explicit Addressing ZigBee Command Frame (ZNet, ZigBee)
@@ -88,12 +88,15 @@ These frame types have yet to be implemented (open an issue if you need one in p
 
 ### THE XBeeAPI CLASS
 
-To get an instance of the `xbeeAPI` of the `XBeeAPI` class:
+To get an instance `xbeeAPI` of the `XBeeAPI` class:
 ```javascript
 var xbee_api = require('xbee-api');
 var xbeeAPI = new xbee_api.XBeeAPI({
-	// default options:
-	api_mode: 1
+    // default options:
+    api_mode: 1,      // [1, 2]; 1 is default, 2 is with escaping (set ATAP=2)
+    module: "Any",    // ["802.15.4", "ZNet", "ZigBee", "Any"]; This does nothing, yet!
+    raw_frames: false // [true, false]; If set to true, only raw byte frames are
+                      // emitted (after validation) but not parsed to objects. 
 });
 ```
 In the following a documentation of all class methods.
