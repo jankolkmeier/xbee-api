@@ -104,7 +104,7 @@ Execute the AT command set in `command`, optionally set a `comandParameter` valu
 ```
 Pretty much the same as AT Command Requests, except that the commands are queued and applied at once when either an `AC` command is queued or a regular AT command request is sent.
 
-#### 0x17: AT Remote Command Request
+#### 0x17: Series 2 (ZigBee) AT Remote Command Request
 ```javascript
 {
 	type: 0x17, // xbee_api.constants.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST
@@ -172,7 +172,7 @@ Objects created from API frames that the XBee would recieve contain a `type` pro
 ```
 This is a response to a AT command request, for example to query or change an AT parameter value on the XBee module. The command was, in this case, setting the `BD` parameter of module. The command status `0` means `OK` (see [Constants]() for more), which means that the baud rate was changed successfully. 
 
-#### 0x97: AT Remote Command Response
+#### 0x97: Series 2 (ZigBee) AT Remote Command Response
 ```javascript
 {
 	type: 0x97, // xbee_api.constants.FRAME_TYPE.REMOTE_COMMAND_RESPONSE 
