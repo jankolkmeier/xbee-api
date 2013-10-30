@@ -2,12 +2,12 @@
 
 [Digi's xbee modules](http://www.digi.com/xbee) are good for quickly building low power wireless networks. They can be used to send/receive text data from serial ports of different devices. XBees can also be used alone for their on board digital and analog I/O capabilities.
 
-**xbee-api** helps you parsing and building API frames that are used to communicate with XBee modules. **xbee-api** does *not* take care of the serial connection itself, but it is easy to hook it up to modules such as [serialport](https://github.com/voodootikigod/node-serialport/).
+The **xbee-api** (Nodejs)[http://nodejs.org/] module helps you parsing and building API frames that are used to communicate with XBee modules. **xbee-api** does *not* take care of the serial connection itself, but it is easy to hook it up to modules such as [serialport](https://github.com/voodootikigod/node-serialport/).
 
 Note that higher-level abstraction as currently provided in [svd-xbee](https://github.com/jouz/svd-xbee/) is not part of this module anymore, but will be factored out to third modules (see [xbee-stream](https://github.com/jouz/xbee-stream/) and [xbee-stream-nodes](https://github.com/jouz/xbee-stream-nodes/), WiP).
 
 ## GETTING STARTED
-Install the module with: `npm install xbee-api`
+Install the module with: `(npm)[https://npmjs.org/] install xbee-api`
 
 ```javascript
 var xbee_api = require('xbee-api');
