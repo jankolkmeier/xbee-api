@@ -29,7 +29,7 @@
     "test": "grunt nodeunit"
   },
   "devDependencies": {
-    "serialport": "~1.1.0",
+    "serialport": "~1.2.3",
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-nodeunit": "~0.2.0",
     "grunt-contrib-watch": "~0.4.0",
