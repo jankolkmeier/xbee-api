@@ -67,17 +67,17 @@ The following frame types are implemented:
 - 0x8A: Modem Status (802.15.4, ZNet, ZigBee)
 - 0x97: Remote Command Response (802.15.4, ZNet, ZigBee)
 - 0x10: ZigBee Transmit Request (ZNet, ZigBee)
+- 0x11: Explicit Addressing ZigBee Command Frame (ZNet, ZigBee)
 - 0x8B: ZigBee Transmit Status (ZNet, ZigBee)
 - 0x90: ZigBee Receive Packet (AO=0) (ZNet, ZigBee)
+- 0x91: ZigBee Explicit Rx Indicator (AO=1) (ZNet, ZigBee)
 - 0x92: ZigBee IO Data Sample Rx Indicator (ZNet, ZigBee)
+- 0x94: XBee Sensor Read Indicator (AO=0) (ZNet, ZigBee)
 - 0x95: Node Identification Indicator (AO=0) (ZNet, ZigBee)
 
 ### NOT IMPLEMENTED YET
-These frame types have yet to be implemented (open an issue if you need one in particular): 
+These (more esoteric) frame types have not been implemented yet, [Open a new issue](https://github.com/jouz/xbee-api/issues/new) if you need something in particular: 
 
-- 0x11: Explicit Addressing ZigBee Command Frame (ZNet, ZigBee)
-- 0x91: ZigBee Explicit Rx Indicator (AO=1) (ZNet, ZigBee)
-- 0x94: XBee Sensor Read Indicator (AO=0) (ZNet, ZigBee)
 - 0x21: Create Source Route (ZigBee)
 - 0x24: Register Joining Device (ZigBee)
 - 0xA0: Over-the-Air Firmware Update Status (ZigBee)
@@ -123,7 +123,9 @@ Is emitted whenever a complete frame is collected and parsed.
 Increments the internal `frameId` counter and returns it. Useful for building requests where we want to identify the respective response frame later on.
 
 ### CREATING FRAMES FROM OBJECTS TO WRITE TO THE XBEE
-There are four basic requests we can make to the XBee of which two are essentially the same. We can make (queued) command requests (0x08 and 0x09) and *remote* command request (0x17). These all behave pretty much the same as writing AT commands in AT mode. Lastly, there are transmit requests which can be used to send your own data to other devices.
+There are four basic requests we can make to the XBee of which two are essentially the same. We can make (queued) command requests (0x08 and 0x09) and *remote* command request (0x17). These all behave pretty much the same as writing AT commands in AT mode. Lastly, there are transmit requests which can be used to send your own data to other devices (0x10, 0x00, 0x01 - depending on your firmware).
+
+Note that many parameters have default values. For example, `destination16/64` default to their unknown/broadcast values. For non-single-byte parameters, you can choose to pass a string (`"fffe"`) or a byte array (`[0xff, 0xfe]`). We'd expect the latter to be slightly faster (but no benchmarks have been made).
 
 #### 0x08: AT Command (802.15.4, ZNet, ZigBee)
 ```javascript
@@ -200,6 +202,24 @@ Transmit your own `data` to a remote node using a 64 bit address. This is for Se
 ```
 Transmit your own `data` to a remote node using a 16 bit address. This is for Series 1 / 802.15.4 modules only!
 
+#### 0x11: Explicit Addressing ZigBee Command Frame (ZNet, ZigBee)
+```javascript
+{
+    type: 0x10, // xbee_api.constants.FRAME_TYPE.ZIGBEE_TRANSMIT_REQUEST
+    id: 0x01, // optional, nextFrameId() is called per default
+    destination64: "0013a200400a0127", // default is broadcast address
+    destination16: "fffe", // default is "fffe" (unknown/broadcast)
+    sourceEndpoint: 0xA0,
+    destinationEndpoint: 0xA1,
+    clusterId: "1554",
+    profileId: "C105",
+    broadcastRadius: 0x00, // optional, 0x00 is default
+    options: 0x00, // optional, 0x00 is default
+    data: "TxData0A" // Can either be string or byte array.
+}
+```
+Allows ZigBee application layer fields (endpoint and cluster ID) to be specified for a data transmission. Similar to the ZigBee Transmit Request, but also requires ZigBee application layer addressing fields to be specified (endpoints, cluster ID, profile ID). An Explicit Addressing Request API frame causes the module to send data as an RF packet to the specified destination, using the specified source and destination endpoints, cluster ID, and profile ID.
+
 ### OBJECTS CREATED FORM RECEIVED API FRAMES
 Objects created from API frames that the XBee would recieve contain a `type` property that identifies the frame type. If the frame is a response to a query made earlier, the `id` that was used for that request is also included.
 
@@ -213,7 +233,7 @@ Objects created from API frames that the XBee would recieve contain a `type` pro
 	commandData: []
 }
 ```
-This is a response to a AT command request, for example to query or change an AT parameter value on the XBee module. The command was, in this case, setting the `BD` parameter of module. The command status `0` means `OK` (see [Constants]() for more), which means that the baud rate was changed successfully. 
+This is a response to a AT command request, for example to query or change an AT parameter value on the XBee module. The command was, in this case, setting the `BD` parameter of module. The command status `0` means `OK` (see [Constants](#constants) for more), which means that the baud rate was changed successfully. 
 
 #### 0x97: Remote Command Response (802.15.4, ZNet, ZigBee)
 ```javascript
@@ -250,7 +270,7 @@ This status is received after sending out a transmit request to the XBee (i.e. t
 	modemStatus: 0x06
 }
 ```
-These statuses give information about the general operation of the XBee. See the [Constants]() section for more.
+These statuses give information about the general operation of the XBee. See the [Constants](#constants) section for more.
 
 #### 0x90: ZigBee Receive Packet (AO=0) (ZNet, ZigBee)
 ```javascript
@@ -263,6 +283,9 @@ These statuses give information about the general operation of the XBee. See the
 }
 ```
 This frame contains general data (such as text data) received from remote nodes.
+
+#### 0x91: ZigBee Explicit Rx Indicator (AO=1) (ZNet, ZigBee)
+See *0x90: ZigBee Receive Packet (AO=0) (ZNet, ZigBee)* above.
 
 #### 0x92: ZigBee IO Data Sample Rx Indicator (ZNet, ZigBee)
 ```javascript
@@ -283,6 +306,28 @@ This frame contains general data (such as text data) received from remote nodes.
 }
 ```
 An I/O data sample that contains information about the state of the digital and analog I/O pins that are set to sample data. Here, pins `DIO2` & `DIO4` read `HIGH`, `DIO3` reads `LOW`, and `AD1` samples an analog voltage of `644mV`.
+
+#### 0x94: XBee Sensor Read Indicator (AO=0) (ZNet, ZigBee)
+```javascript
+{
+    type: 0x94, // xbee_api.constants.FRAME_TYPE.XBEE_SENSOR_READ 
+    remote64: "0013a20040522baa",
+    remote16: "7d84",
+    receiveOptions: 0x01,
+    sensorValues: {
+      AD0: 0.04,
+      AD1: 4.12,
+      AD2: 4.68,
+      AD3: 1.64,
+      T: 362,
+      temperature: 22.625,     // in °C, undefined if no temp sens
+      relativeHumidity: 30.71, // in %, undefined if no hum sens
+      trueHumidity: 30.54,     // in %, undefined if not both temp & hum
+      waterPresent: false
+    }
+}
+```
+When the module receives a sensor sample (from a Digi 1-wire sensor adapter).
 
 #### 0x95: Node Identification Indicator (AO=0) (ZNet, ZigBee)
 ```javascript
