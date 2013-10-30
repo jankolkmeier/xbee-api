@@ -219,6 +219,34 @@ exports['API Frame Parsing'] = {
     var rawFrame = new Buffer([ 0x7E, 0x00, 0x14, 0x92, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x7D, 0x84, 0x01, 0x01, 0x00, 0x1C, 0x02, 0x00, 0x14, 0x02, 0x25, 0xF5 ]);
     parser(null, rawFrame);
   },
+  'XBee Sensor Read Indicator': function(test) {
+    test.expect(5);
+    var xbeeAPI = new xbee_api.XBeeAPI();
+    var parser = xbeeAPI.rawParser();
+
+    xbeeAPI.once("frame_object", function(frame) {
+      test.equal(frame.remote64, '0013a20040522baa', "Parse remote64");
+      test.equal(frame.remote16, 'dd6c', "Parse remote16");
+      test.equal(frame.receiveOptions, 1, "Parse receive options");
+      test.equal(frame.sensors, 0x03, "Parse receive options");
+      test.deepEqual(frame.sensorValues, {
+        "AD0": 0.04,
+        "AD1": 4.12,
+        "AD2": 4.68,
+        "AD3": 1.64,
+        "T": 362,
+        "temperature": 22.625,
+        "relativeHumidity": 30.71,
+        "trueHumidity": 30.54,
+        "waterPresent": false
+      }, "Parsing digital samples");
+      test.done();
+    });
+
+    // Receive IO Data Sample; 0x94; ...
+    var rawFrame = new Buffer([ 0x7E, 0x00, 0x17, 0x94, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2b, 0xAA, 0xDD, 0x6c, 0x01, 0x03, 0x00, 0x02, 0x00, 0xCE, 0x00, 0xEA, 0x00, 0x52, 0x01, 0x6A, 0x8B ]);
+    parser(null, rawFrame);
+  },
   'Node Identification Indicator': function(test) {
     test.expect(9);
     var xbeeAPI = new xbee_api.XBeeAPI();
