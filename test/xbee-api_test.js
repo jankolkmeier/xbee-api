@@ -230,10 +230,10 @@ exports['API Frame Parsing'] = {
       test.equal(frame.receiveOptions, 1, "Parse receive options");
       test.equal(frame.sensors, 0x03, "Parse receive options");
       test.deepEqual(frame.sensorValues, {
-        "AD0": 0.04,
-        "AD1": 4.12,
-        "AD2": 4.68,
-        "AD3": 1.64,
+        "AD0": 40,
+        "AD1": 4120,
+        "AD2": 4680,
+        "AD3": 1640,
         "T": 362,
         "temperature": 22.625,
         "relativeHumidity": 30.71,

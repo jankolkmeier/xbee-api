@@ -313,12 +313,13 @@ An I/O data sample that contains information about the state of the digital and 
     type: 0x94, // xbee_api.constants.FRAME_TYPE.XBEE_SENSOR_READ 
     remote64: "0013a20040522baa",
     remote16: "7d84",
+    sensors: 0x03,
     receiveOptions: 0x01,
     sensorValues: {
-      AD0: 0.04,
-      AD1: 4.12,
-      AD2: 4.68,
-      AD3: 1.64,
+      AD0:   40, // A/D values in mV
+      AD1: 4120,
+      AD2: 4680,
+      AD3: 1640,
       T: 362,
       temperature: 22.625,     // in °C, undefined if no temp sens
       relativeHumidity: 30.71, // in %, undefined if no hum sens
