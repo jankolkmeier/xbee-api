@@ -39,6 +39,14 @@ console.log(xbeeAPI.parseFrame(raw_frame));
 //   commandData: [ 64, 82, 43, 170 ] }
 ```
 
+## SUPPORTED XBEE MODELS
+Both Series 1 (802.15.4) and Series 2 (ZNet 2.5 and ZIGBEE) modules are supported now.
+Since ZIGBEE offers more features and is more robust, you might be interested in upgrading your Series 2 modules from ZNet 2.5 to ZIGBEE: [upgradingfromznettozb.pdf](ftp://ftp1.digi.com/support/documentation/upgradingfromznettozb.pdf).  
+Development is done using Series 2 XBee modules with XB24-ZB (ZIGBEE) firmware. These documents are used as reference: [90000976_M.pdf (for Series 2)](http://ftp1.digi.com/support/documentation/90000976_M.pdf) and 
+[90000982_M.pdf (for Series 1)](http://ftp1.digi.com/support/documentation/90000982_M.pdf). Some frame types are Series 1/2 specific. Be sure to use the correct ones for your module (as described in the documents and in the frame types section).
+
+Modules must run in API mode. Both AP=1 and AP=2 modes are supported (set the api_mode parameter accordingly).
+
 ## DOCUMENTATION
 
 ### The XBeeAPI Class
@@ -401,16 +409,7 @@ xbeeAPI.on("frame_object", function(frame) {
 See the [examples folder](https://github.com/jouz/xbee-api/tree/master/examples) in the repository for more examples.
 
 ## CONTRIBUTE
-Feel free to send a pull request. There are nodeunit test in the `test/` folder.
-
-## SUPPORTED XBEE MODELS
-Both Series 1 (802.15.4) and Series 2 (ZNet 2.5 and ZIGBEE) modules are supported now.
-Since ZIGBEE offers more features and is more robust, you might be interested in upgrading your Series 2 modules from ZNet 2.5 to ZIGBEE: [upgradingfromznettozb.pdf](ftp://ftp1.digi.com/support/documentation/upgradingfromznettozb.pdf).  
-Development is done using Series 2 XBee modules with XB24-ZB (ZIGBEE) firmware. These documents are used as reference: [90000976_M.pdf (for Series 2)](http://ftp1.digi.com/support/documentation/90000976_M.pdf) and 
-[90000982_M.pdf (for Series 1)](http://ftp1.digi.com/support/documentation/90000982_M.pdf). Some frame types are Series 1/2 specific. Be sure to use the correct ones for your module (as described in the documents and in the frame types section).
-
-
-Modules must run in API mode. Both AP=1 and AP=2 modes are supported (set the api_mode parameter accordingly).
+Feel free to send a pull request. There are nodeunit test in the `test/` folder (clone; run `npm install`; run `grunt nodeunit`).
 
 ## LICENSE
 Copyright (c) 2013 Jan Kolkmeier  
