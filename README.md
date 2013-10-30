@@ -47,6 +47,43 @@ Development is done using Series 2 XBee modules with XB24-ZB (ZigBee) firmware. 
 
 Modules must run in API mode. Both AP=1 and AP=2 modes are supported (set the api_mode parameter accordingly).
 
+## SUPPORTED FRAME TYPES
+The following frame types are implemented:
+
+- TX (Transmit) Request: 64-bit address (0x00) (802.15.4)
+- TX (Transmit) Request: 16-bit address (0x01) (802.15.4)
+- AT Command (0x08) (802.15.4, ZNet, ZigBee)
+- AT Command Queue Parameter Value (0x09) (802.15.4, ZNet, ZigBee)
+- Remote Command Request (0x17) (802.15.4, ZNet, ZigBee)
+- RX (Receive) Packet: 64-bit Address (0x80) (802.15.4)
+- RX (Receive) Packet: 16-bit Address (0x81) (802.15.4)
+- RX (Receive) Packet: 64-bit Address IO (0x82) (802.15.4)
+- RX (Receive) Packet: 16-bit Address IO (0x83) (802.15.4)
+- AT Command Response (0x88) (802.15.4, ZNet, ZigBee)
+- TX (Transmit) Status (0x89) (802.15.4)
+- Modem Status (0x8A) (802.15.4, ZNet, ZigBee)
+- Remote Command Response (0x97) (802.15.4, ZNet, ZigBee)
+- ZigBee Transmit Request (0x10) (ZNet, ZigBee)
+- ZigBee Transmit Status (0x8B) (ZNet, ZigBee)
+- ZigBee Receive Packet (AO=0) (0x90) (ZNet, ZigBee)
+- ZigBee IO Data Sample Rx Indicator (0x92) (ZNet, ZigBee)
+- Node Identification Indicator (AO=0) (0x95) (ZNet, ZigBee)
+
+### NOT IMPLEMENTED
+These frame types have yet to be implemented (open an issue if you need one in particular): 
+
+- Explicit Addressing ZigBee Command Frame (0x11) (ZNet, ZigBee)
+- ZigBee Explicit Rx Indicator (AO=1) (0x91) (ZNet, ZigBee)
+- XBee Sensor Read Indicator (AO=0) (0x94) (ZNet, ZigBee)
+- Create Source Route (0x21) (ZigBee)
+- Register Joining Device (0x24) (ZigBee)
+- Over-the-Air Firmware Update Status (0xA0) (ZigBee)
+- Route Record Indicator (0xA1) (ZigBee)
+- Device Authenticated Indicator (0xA2) (ZigBee)
+- Many-to-One Route Request Indicator (0xA3) (ZigBee)
+- Register Joining Device Status (0xA4) (ZigBee)
+- Join Notification Status (0xA5) (ZigBee)
+
 ## DOCUMENTATION
 
 ### The XBeeAPI Class
@@ -104,7 +141,7 @@ Execute the AT command set in `command`, optionally set a `comandParameter` valu
 ```
 Pretty much the same as AT Command Requests, except that the commands are queued and applied at once when either an `AC` command is queued or a regular AT command request is sent.
 
-#### 0x17: Series 2 (ZigBee) AT Remote Command Request
+#### 0x17: AT Remote Command Request
 ```javascript
 {
 	type: 0x17, // xbee_api.constants.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST
@@ -172,7 +209,7 @@ Objects created from API frames that the XBee would recieve contain a `type` pro
 ```
 This is a response to a AT command request, for example to query or change an AT parameter value on the XBee module. The command was, in this case, setting the `BD` parameter of module. The command status `0` means `OK` (see [Constants]() for more), which means that the baud rate was changed successfully. 
 
-#### 0x97: Series 2 (ZigBee) AT Remote Command Response
+#### 0x97: AT Remote Command Response
 ```javascript
 {
 	type: 0x97, // xbee_api.constants.FRAME_TYPE.REMOTE_COMMAND_RESPONSE 
