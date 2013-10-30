@@ -29,6 +29,7 @@ var raw_frame = new Buffer([
 	0x7E, 0x00, 0x13, 0x97, 0x55, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B,
 	0xAA, 0x7D, 0x84, 0x53, 0x4C, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0xF0
 ]);
+
 console.log(xbeeAPI.parseFrame(raw_frame));
 // { type: 151,
 //   id: 85,
@@ -38,6 +39,8 @@ console.log(xbeeAPI.parseFrame(raw_frame));
 //   commandStatus: 0,
 //   commandData: [ 64, 82, 43, 170 ] }
 ```
+
+**See the [Examples](#examples) section for more useful/practical examples!**
 
 ## SUPPORTED XBEE MODELS
 Both Series 1 (802.15.4) and Series 2 (ZNet 2.5 and ZigBee) modules are supported now. These documents are used as reference: [90000976_M.pdf (for Series 2)](http://ftp1.digi.com/support/documentation/90000976_M.pdf) and 
