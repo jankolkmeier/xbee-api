@@ -2,10 +2,10 @@
 
 The [xbee-api](http://github.com/jouz/xbee-api/) [Node.js](http://nodejs.org/) module helps you
 parsing and building API frames that are used to communicate with radio modules talking
-the [802.15.4](http://en.wikipedia.org/wiki/IEEE_802.15.4) and [ZigBee](http://en.wikipedia.org/wiki/ZigBee) (including *ZNet*) protocol stack.
+the [802.15.4](http://en.wikipedia.org/wiki/IEEE_802.15.4) and [ZigBee](http://en.wikipedia.org/wiki/ZigBee) (including **ZNet**) protocol stacks.
 These are most commonly used in Digi's [xbee](http://www.digi.com/xbee) radio modules, hence the name of this node module.
 However, other devices with the mentioned protocol stacks should also be supported.
-For details on supported firmwares and devices, see (here)[#supported-firmwares-and-devices].
+For details on supported firmwares and devices, see [here](#supported-firmwares-and-devices).
 
 [xbee-api](http://github.com/jouz/xbee-api/) does *not* take care of the serial connection
 itself, but it is easy to hook it up to modules such as [serialport](https://github.com/voodootikigod/node-serialport/).
@@ -49,7 +49,7 @@ console.log(xbeeAPI.parseFrame(raw_frame));
 **See the [Examples](#examples) section for more useful/practical examples!**
 
 ## SUPPORTED FIRMWARES AND DEVICES
-This module supports the [802.15.4](http://en.wikipedia.org/wiki/IEEE_802.15.4) and [ZigBee](http://en.wikipedia.org/wiki/ZigBee) (including *ZNet*) protocol stacks.
+This module supports the [802.15.4](http://en.wikipedia.org/wiki/IEEE_802.15.4) and [ZigBee](http://en.wikipedia.org/wiki/ZigBee) (including **ZNet**) protocol stacks.
 
 From the XBee family, Series 1 (802.15.4) and Series 2 (ZNet 2.5 and ZigBee) modules are supported, since they come with firmwars talking either one of these stacks.
 
