@@ -1,8 +1,14 @@
 # xbee-api [![Build Status](https://secure.travis-ci.org/jouz/xbee-api.png?branch=master)](http://travis-ci.org/jouz/xbee-api)
 
-[Digi's xbee modules](http://www.digi.com/xbee) are good for quickly building low power wireless networks. They can be used to send/receive text data from serial ports of different devices. XBees can also be used alone for their on board digital and analog I/O capabilities.
+The [xbee-api](http://github.com/jouz/xbee-api/) [Node.js](http://nodejs.org/) module helps you
+parsing and building API frames that are used to communicate with radio modules talking
+the [802.15.4](http://en.wikipedia.org/wiki/IEEE_802.15.4) and [ZigBee](http://en.wikipedia.org/wiki/ZigBee) (including *ZNet*) protocol stack.
+These are most commonly used in Digi's [xbee](http://www.digi.com/xbee) radio modules, hence the name of this node module.
+However, other devices with the mentioned protocol stacks should also be supported.
+For details on supported firmwares and devices, see (here)[#supported-firmwares-and-devices].
 
-The **xbee-api** [Node.js](http://nodejs.org/) module helps you parsing and building API frames that are used to communicate with XBee modules. **xbee-api** does *not* take care of the serial connection itself, but it is easy to hook it up to modules such as [serialport](https://github.com/voodootikigod/node-serialport/).
+[xbee-api](http://github.com/jouz/xbee-api/) does *not* take care of the serial connection
+itself, but it is easy to hook it up to modules such as [serialport](https://github.com/voodootikigod/node-serialport/).
 
 Note that higher-level abstraction as currently provided in [svd-xbee](https://github.com/jouz/svd-xbee/) is not part of this module anymore, but will be factored out to third modules (see [xbee-stream](https://github.com/jouz/xbee-stream/) and [xbee-stream-nodes](https://github.com/jouz/xbee-stream-nodes/), WiP).
 
@@ -42,11 +48,15 @@ console.log(xbeeAPI.parseFrame(raw_frame));
 
 **See the [Examples](#examples) section for more useful/practical examples!**
 
-## SUPPORTED XBEE MODELS
-Both Series 1 (802.15.4) and Series 2 (ZNet 2.5 and ZigBee) modules are supported now. These documents are used as reference: [90000976_M.pdf (for Series 2)](http://ftp1.digi.com/support/documentation/90000976_M.pdf) and 
+## SUPPORTED FIRMWARES AND DEVICES
+This module supports the [802.15.4](http://en.wikipedia.org/wiki/IEEE_802.15.4) and [ZigBee](http://en.wikipedia.org/wiki/ZigBee) (including *ZNet*) protocol stacks.
+
+From the XBee family, Series 1 (802.15.4) and Series 2 (ZNet 2.5 and ZigBee) modules are supported, since they come with firmwars talking either one of these stacks.
+
+These documents are used as reference: [90000976_M.pdf (for Series 2)](http://ftp1.digi.com/support/documentation/90000976_M.pdf) and 
 [90000982_M.pdf (for Series 1)](http://ftp1.digi.com/support/documentation/90000982_M.pdf). Some frame types are 802.15.4, ZNet or ZigBee specific. Be sure to use the correct ones for your module (as described in the documents and the list below). Also check out this [utility from Digi](http://ftp1.digi.com/support/utilities/digi_apiframes2.htm).
 
-Modules must run in API mode. Both AP=1 and AP=2 modes are supported (set the api_mode parameter accordingly).
+Modules must run in API mode. Both AP=1 (without escaping) and AP=2 (with escaping) modes are supported (set the api_mode parameter accordingly).
 
 Since ZigBee is more robust and offers more features than ZNet (none of which are yet implemented here, though!), you might be interested in upgrading your Series 2 modules from ZNet 2.5 to ZigBee: [upgradingfromznettozb.pdf](ftp://ftp1.digi.com/support/documentation/upgradingfromznettozb.pdf).  
 
