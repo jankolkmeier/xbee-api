@@ -7,4 +7,6 @@ It doesn't do much yet, you can connect to a COM port and build AT command frame
 The module is built to be included in the chrome app using [browserify](https://github.com/substack/node-browserify). To build it yourself, easiest way is to just install the [Grunt](http://gruntjs.com/) requirements and then run ```grunt browserify-example```. The compiled version of [xbee-api](https://github.com/jouz/xbee-api/) is under ```examples/chrome-tool/js/dist/xbee.js```
 
 ## Using the Chrome Tool
-It doesn't do much right now.
+Open chrome, go to your extensions and enable developer mode. Then ```Load unpacked extension...``` and select this folder (```examples/chrome-tool```). You can launch  and debug it from the extensions page.
+
+![Screenshot](assets/screen01.png)
