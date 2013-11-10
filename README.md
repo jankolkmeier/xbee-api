@@ -516,6 +516,9 @@ xbeeAPI.on("frame_object", function(frame) {
 
 See the [examples folder](https://github.com/jouz/xbee-api/tree/master/examples) in the repository for more examples.
 
+### Use in Google Chrome
+See this [example](http://github.com/jouz/xbee-api/tree/master/examples/chrome-tool) for how to use [xbee-api](https://github.com/jouz/xbee-api/) in Google Chrome using the [chrome.serial](http://developer.chrome.com/apps/serial.html) API.
+
 ## CONTRIBUTE
 Feel free to send a pull request. There are nodeunit test in the `test/` folder (clone; run `npm install`; run `grunt nodeunit`).
 
