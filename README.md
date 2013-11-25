@@ -491,7 +491,7 @@ To link a received frame object to a request we earlier sent, we have to set and
 
 ```javascript
 
-var frameId = xbee.nextFrameId();
+var frameId = xbeeAPI.nextFrameId();
 var frame_obj = {
 	type: C.FRAME_TYPE.AT_COMMAND,
 	id: frameId,
