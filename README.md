@@ -51,7 +51,7 @@ console.log(xbeeAPI.parseFrame(raw_frame));
 ## SUPPORTED FIRMWARES AND DEVICES
 This module supports the [802.15.4](http://en.wikipedia.org/wiki/IEEE_802.15.4) and [ZigBee](http://en.wikipedia.org/wiki/ZigBee) (including **ZNet**) protocol stacks.
 
-From the XBee family, Series 1 (802.15.4) and Series 2 (ZNet 2.5 and ZigBee) modules are supported, since they come with firmwars talking either one of these stacks.
+From the XBee family, Series 1 (802.15.4) and Series 2 (ZNet 2.5 and ZigBee) modules are supported, since they come with firmwares talking either one of these stacks.
 
 These documents are used as reference: [90000976_M.pdf (for Series 2)](http://ftp1.digi.com/support/documentation/90000976_M.pdf) and 
 [90000982_M.pdf (for Series 1)](http://ftp1.digi.com/support/documentation/90000982_M.pdf). Some frame types are 802.15.4, ZNet or ZigBee specific. Be sure to use the correct ones for your module (as described in the documents and the list below). Also check out this [utility from Digi](http://ftp1.digi.com/support/utilities/digi_apiframes2.htm).
