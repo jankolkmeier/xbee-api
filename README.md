@@ -10,7 +10,7 @@ For details on supported firmwares and devices, see [here](#supported-firmwares-
 [xbee-api](http://github.com/jouz/xbee-api/) does *not* take care of the serial connection
 itself, but it is easy to hook it up to modules such as [serialport](https://github.com/voodootikigod/node-serialport/).
 
-Note that higher-level abstraction as currently provided in [svd-xbee](https://github.com/jouz/svd-xbee/) is not part of this module anymore, but will be factored out to third modules (see [xbee-stream](https://github.com/jouz/xbee-stream/) and [xbee-stream-nodes](https://github.com/jouz/xbee-stream-nodes/), WiP).
+Note that higher-level abstraction as currently provided in [svd-xbee](https://github.com/jouz/svd-xbee/) is not part of this module anymore. Consider 101100's promise-based [xbee-promise](https://github.com/101100/xbee-promise) module! Some work has been done towards more abstract, stream-based modules:  [xbee-stream](https://github.com/jouz/xbee-stream/) and [xbee-stream-nodes](https://github.com/jouz/xbee-stream-nodes/) (both WiP)
 
 ## GETTING STARTED
 Install the module with: **[npm](https://npmjs.org/) install xbee-api**
