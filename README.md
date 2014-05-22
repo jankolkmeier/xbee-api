@@ -1,4 +1,4 @@
-# xbee-api [![Build Status](https://secure.travis-ci.org/jouz/xbee-api.png?branch=master)](http://travis-ci.org/jouz/xbee-api)
+# xbee-api [![Build Status](https://travis-ci.org/jankolkmeier/xbee-api.svg?branch=master)](https://travis-ci.org/jankolkmeier/xbee-api)
 
 The [xbee-api](http://github.com/jouz/xbee-api/) [Node.js](http://nodejs.org/) module helps you
 parsing and building API frames that are used to communicate with radio modules talking
