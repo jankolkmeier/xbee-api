@@ -1,16 +1,16 @@
 # xbee-api [![Build Status](https://travis-ci.org/jankolkmeier/xbee-api.svg?branch=master)](https://travis-ci.org/jankolkmeier/xbee-api)
 
-The [xbee-api](http://github.com/jouz/xbee-api/) [Node.js](http://nodejs.org/) module helps you
+The [xbee-api](http://github.com/jankolkmeier/xbee-api/) [Node.js](http://nodejs.org/) module helps you
 parsing and building API frames that are used to communicate with radio modules talking
 the [802.15.4](http://en.wikipedia.org/wiki/IEEE_802.15.4) and [ZigBee](http://en.wikipedia.org/wiki/ZigBee) (including **ZNet**) protocol stacks.
 These are most commonly used in Digi's [xbee](http://www.digi.com/xbee) radio modules, hence the name of this node module.
 However, other devices with the mentioned protocol stacks should also be supported.
 For details on supported firmwares and devices, see [here](#supported-firmwares-and-devices).
 
-[xbee-api](http://github.com/jouz/xbee-api/) does *not* take care of the serial connection
+[xbee-api](http://github.com/jankolkmeier/xbee-api/) does *not* take care of the serial connection
 itself, but it is easy to hook it up to modules such as [serialport](https://github.com/voodootikigod/node-serialport/).
 
-Note that higher-level abstraction as currently provided in [svd-xbee](https://github.com/jouz/svd-xbee/) is not part of this module anymore. Consider 101100's promise-based [xbee-promise](https://github.com/101100/xbee-promise) module! Some work has been done towards more abstract, stream-based modules:  [xbee-stream](https://github.com/jouz/xbee-stream/) and [xbee-stream-nodes](https://github.com/jouz/xbee-stream-nodes/) (both WiP)
+Note that higher-level abstraction as currently provided in [svd-xbee](https://github.com/jankolkmeier/svd-xbee/) is not part of this module anymore. Consider 101100's promise-based [xbee-promise](https://github.com/101100/xbee-promise) module! Some work has been done towards more abstract, stream-based modules:  [xbee-stream](https://github.com/jankolkmeier/xbee-stream/) and [xbee-stream-nodes](https://github.com/jankolkmeier/xbee-stream-nodes/) (both WiP)
 
 ## GETTING STARTED
 Install the module with: **[npm](https://npmjs.org/) install xbee-api**
@@ -86,7 +86,7 @@ The following frame types are implemented:
 - 0x95: Node Identification Indicator (AO=0) (ZNet, ZigBee)
 
 ### NOT IMPLEMENTED YET
-These (more esoteric) frame types have not been implemented yet, [Open a new issue](https://github.com/jouz/xbee-api/issues/new) if you need something in particular: 
+These (more esoteric) frame types have not been implemented yet, [Open a new issue](https://github.com/jankolkmeier/xbee-api/issues/new) if you need something in particular: 
 
 - 0x21: Create Source Route (ZigBee)
 - 0x24: Register Joining Device (ZigBee)
@@ -514,10 +514,10 @@ xbeeAPI.on("frame_object", function(frame) {
 });
 ```
 
-See the [examples folder](https://github.com/jouz/xbee-api/tree/master/examples) in the repository for more examples.
+See the [examples folder](https://github.com/jankolkmeier/xbee-api/tree/master/examples) in the repository for more examples.
 
 ### Use in Google Chrome
-See this [example](http://github.com/jouz/xbee-api/tree/master/examples/chrome-tool) for how to use [xbee-api](https://github.com/jouz/xbee-api/) in Google Chrome using the [chrome.serial](http://developer.chrome.com/apps/serial.html) API.
+See this [example](http://github.com/jankolkmeier/xbee-api/tree/master/examples/chrome-tool) for how to use [xbee-api](https://github.com/jankolkmeier/xbee-api/) in Google Chrome using the [chrome.serial](http://developer.chrome.com/apps/serial.html) API.
 
 ## CONTRIBUTE
 Feel free to send a pull request. There are nodeunit test in the `test/` folder (clone; run `npm install`; run `grunt nodeunit`).
