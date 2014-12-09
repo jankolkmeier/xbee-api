@@ -193,6 +193,22 @@ exports['API Frame Parsing'] = {
     // Receive Packet; 0x90; Receive packet with chars RxData
     var rawFrame = new Buffer([ 0x7E, 0x00, 0x12, 0x90, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x7D, 0x84, 0x01, 0x52, 0x78, 0x44, 0x61, 0x74, 0x61, 0x0D ]);
     parser(null, rawFrame);
+  }, 
+  'Route Record': function(test) {
+    test.expect(5);
+    var xbeeAPI = new xbee_api.XBeeAPI();
+    var parser = xbeeAPI.rawParser();
+    xbeeAPI.once("frame_object", function(frame) {
+      test.equal(frame.remote64, '0013a2004068f65b', "Parse remote64");
+      test.equal(frame.remote16, '6d32', "Parse remote16");
+      test.equal(frame.receiveOptions, 0, "Parse receive options");
+      test.equal(frame.hopCount, 3, "Parse hop count");
+      test.deepEqual(frame.addresses, [0x1234, 0x5678, 0x90AB], "Parse hop addresses");
+      test.done();
+    });
+    // Receive Packet; 0xa1; Receive packet with 3 intermediate hops
+    var rawFrame = new Buffer([ 0x7e, 0x00, 0x13, 0xa1, 0x00, 0x13, 0xa2, 0x00, 0x40, 0x68, 0xf6, 0x5b, 0x6d, 0x32, 0x00, 0x03, 0x12, 0x34, 0x56, 0x78, 0x90, 0xab, 0xbf ]);
+    parser(null, rawFrame);
   },
   'ZigBee IO Data Sample Rx': function(test) {
     test.expect(6);

@@ -36,5 +36,8 @@
     "grunt-browserify": "~1.2.11",
     "grunt": "~0.4.1"
   },
-  "keywords": []
+  "keywords": [],
+  "dependencies": {
+    "lodash": "^2.4.1"
+  }
 }
