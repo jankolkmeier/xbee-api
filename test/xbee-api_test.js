@@ -202,9 +202,8 @@ exports['API Frame Parsing'] = {
     var parser = xbeeAPI.rawParser();
     xbeeAPI.once("frame_object", function(frame) {
       test.equal(frame.remote16, '1234', "Parse remote16");
-      test.equal(frame.analogSamples.length, frame.sampleQuantity, "Parse the right number of samples");
-      test.equal(frame.channelMask, 0x0E58, "channel mask");
-      console.log(frame);
+      test.equal(frame.data.analogSamples.length, frame.data.sampleQuantity, "Parse the right number of samples");
+      test.equal(frame.data.channelMask, 0x0E58, "channel mask");
       test.done();
     });
     // Receive Packet; 0x83; Receive packet from IC or IR setting
