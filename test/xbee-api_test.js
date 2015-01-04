@@ -179,6 +179,7 @@ exports['API Frame Parsing'] = {
     var rawFrame = new Buffer([ 0x7E, 0x00, 0x02, 0x8A, 0x06, 0x6F ]);
     parser(null, rawFrame);
   }, 
+
   'Receive Packet': function(test) {
     test.expect(4);
     var xbeeAPI = new xbee_api.XBeeAPI();
@@ -194,6 +195,23 @@ exports['API Frame Parsing'] = {
     var rawFrame = new Buffer([ 0x7E, 0x00, 0x12, 0x90, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x7D, 0x84, 0x01, 0x52, 0x78, 0x44, 0x61, 0x74, 0x61, 0x0D ]);
     parser(null, rawFrame);
   }, 
+
+  'Receive Packet 16-bit IO': function(test) {
+    test.expect(3);
+    var xbeeAPI = new xbee_api.XBeeAPI({api_mode:1});
+    var parser = xbeeAPI.rawParser();
+    xbeeAPI.once("frame_object", function(frame) {
+      test.equal(frame.remote16, '1234', "Parse remote16");
+      test.equal(frame.analogSamples.length, frame.sampleQuantity, "Parse the right number of samples");
+      test.equal(frame.channelMask, 0x0E58, "channel mask");
+      console.log(frame);
+      test.done();
+    });
+    // Receive Packet; 0x83; Receive packet from IC or IR setting
+    var rawFrame = new Buffer([0x7E, 0x00, 0x10, 0x83, 0x12, 0x34, 0x1B, 0x00, 0x01, 0x0E, 0x58, 0x00, 0x18, 0x00, 0x46, 0x01, 0x54, 0x02, 0x0A, 0xF5 ]);
+    parser(null, rawFrame);
+  }, 
+
   'Route Record': function(test) {
     test.expect(5);
     var xbeeAPI = new xbee_api.XBeeAPI();
@@ -210,6 +228,7 @@ exports['API Frame Parsing'] = {
     var rawFrame = new Buffer([ 0x7e, 0x00, 0x13, 0xa1, 0x00, 0x13, 0xa2, 0x00, 0x40, 0x68, 0xf6, 0x5b, 0x6d, 0x32, 0x00, 0x03, 0x12, 0x34, 0x56, 0x78, 0x90, 0xab, 0xbf ]);
     parser(null, rawFrame);
   },
+  
   'ZigBee IO Data Sample Rx': function(test) {
     test.expect(6);
     var xbeeAPI = new xbee_api.XBeeAPI();
