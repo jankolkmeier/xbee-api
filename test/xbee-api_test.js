@@ -125,7 +125,7 @@ exports['API Frame Parsing'] = {
       test.equal(frame.remote16, '7d84', "Parse remote16");
       test.equal(frame.command, "SL", "Parse command");
       test.equal(frame.commandStatus, 0, "Parse command status");
-      test.deepEqual(frame.commandData, [ 0x40, 0x52, 0x2b, 0xaa ]);
+      test.deepEqual(frame.commandData, new Buffer([ 0x40, 0x52, 0x2b, 0xaa ]));
       test.done();
     });
 
@@ -185,7 +185,7 @@ exports['API Frame Parsing'] = {
       test.equal(frame.remote64, '0013a20040522baa', "Parse remote64");
       test.equal(frame.remote16, '7d84', "Parse remote16");
       test.equal(frame.receiveOptions, 1, "Parse receive options");
-      test.deepEqual(frame.data, [ 0x52, 0x78, 0x44, 0x61, 0x74, 0x61 ]);
+      test.deepEqual(frame.data, new Buffer([ 0x52, 0x78, 0x44, 0x61, 0x74, 0x61 ]));
       test.done();
     });
     // Receive Packet; 0x90; Receive packet with chars RxData
@@ -272,7 +272,7 @@ exports['API Frame Parsing'] = {
       test.equal(frame.receiveOptions, 2, "Parse receive options");
       test.equal(frame.remote16, '7d84', "Parse remote16");
       test.equal(frame.remote64, '0013a20040522baa', "Parse remote64");
-      test.equal(frame.nodeIdentifier, "", "Parse node identifier");
+      test.equal(frame.nodeIdentifier, " ", "Parse node identifier");
       test.equal(frame.remoteParent16, 'fffe', "Parse parent16 ");
       test.equal(frame.deviceType, 1, "Parse device type");
       test.equal(frame.sourceEvent, 1, "Parse source event");
