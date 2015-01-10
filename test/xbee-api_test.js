@@ -8,10 +8,8 @@
 
 'use strict';
 
-var util = require('util');
 var xbee_api = require('../lib/xbee-api.js');
 var C = require('../lib/constants.js');
-var events = require('events');
 
 exports['Main'] = {
   setUp: function(done) {
@@ -112,7 +110,7 @@ exports['API Frame building'] = { // These have to be tested both for AP=1 and 2
     test.deepEqual(expected0, xbeeAPI.buildFrame(frame), "create raw frame");
     test.done();
   }
-}
+};
 
 
 exports['API Frame Parsing'] = {
@@ -274,7 +272,7 @@ exports['API Frame Parsing'] = {
       test.equal(frame.receiveOptions, 2, "Parse receive options");
       test.equal(frame.remote16, '7d84', "Parse remote16");
       test.equal(frame.remote64, '0013a20040522baa', "Parse remote64");
-      test.equal(frame.nodeIdentifier, " ", "Parse node identifier");
+      test.equal(frame.nodeIdentifier, "", "Parse node identifier");
       test.equal(frame.remoteParent16, 'fffe', "Parse parent16 ");
       test.equal(frame.deviceType, 1, "Parse device type");
       test.equal(frame.sourceEvent, 1, "Parse source event");
@@ -293,17 +291,17 @@ exports['API Frame Parsing'] = {
     var parsed = 0;
 
     xbeeAPI.on("frame_object", function(frame) {
-      if (parsed == 0) {
+      if (parsed === 0) {
         test.equal(frame.id, 0x7D, "Parse id");
-      } else if (parsed == 1) {
+      } else if (parsed === 1) {
         test.equal(frame.id, 0x7E, "Parse id");
-      } else if (parsed == 2) {
+      } else if (parsed === 2) {
         test.equal(frame.id, 0x62, "Parse id");
-      } else if (parsed == 3) {
+      } else if (parsed === 3) {
         test.equal(frame.id, 0x64, "Parse id");
-      } else if (parsed == 4) {
+      } else if (parsed === 4) {
         test.equal(frame.id, 0x65, "Parse id");
-      } else if (parsed == 5) {
+      } else if (parsed === 5) {
         test.equal(frame.id, 0x66, "Parse id");
         test.done();
       }
