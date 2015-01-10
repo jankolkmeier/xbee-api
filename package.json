@@ -38,7 +38,7 @@
   },
   "keywords": [],
   "dependencies": {
-    "buffer-builder": "git://github.com/prodatakey/node-buffer-builder",
+    "buffer-builder": "^0.2.0",
     "buffer-reader": "git://github.com/prodatakey/node-buffer-reader"
   }
 }
