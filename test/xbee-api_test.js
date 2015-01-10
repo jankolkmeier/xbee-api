@@ -8,10 +8,8 @@
 
 'use strict';
 
-var util = require('util');
 var xbee_api = require('../lib/xbee-api.js');
 var C = require('../lib/constants.js');
-var events = require('events');
 
 exports['Main'] = {
   setUp: function(done) {
@@ -112,7 +110,7 @@ exports['API Frame building'] = { // These have to be tested both for AP=1 and 2
     test.deepEqual(expected0, xbeeAPI.buildFrame(frame), "create raw frame");
     test.done();
   }
-}
+};
 
 
 exports['API Frame Parsing'] = {
@@ -127,7 +125,7 @@ exports['API Frame Parsing'] = {
       test.equal(frame.remote16, '7d84', "Parse remote16");
       test.equal(frame.command, "SL", "Parse command");
       test.equal(frame.commandStatus, 0, "Parse command status");
-      test.deepEqual(frame.commandData, [ 0x40, 0x52, 0x2b, 0xaa ]);
+      test.deepEqual(frame.commandData, new Buffer([ 0x40, 0x52, 0x2b, 0xaa ]));
       test.done();
     });
 
@@ -188,7 +186,7 @@ exports['API Frame Parsing'] = {
       test.equal(frame.remote64, '0013a20040522baa', "Parse remote64");
       test.equal(frame.remote16, '7d84', "Parse remote16");
       test.equal(frame.receiveOptions, 1, "Parse receive options");
-      test.deepEqual(frame.data, [ 0x52, 0x78, 0x44, 0x61, 0x74, 0x61 ]);
+      test.deepEqual(frame.data, new Buffer([ 0x52, 0x78, 0x44, 0x61, 0x74, 0x61 ]));
       test.done();
     });
     // Receive Packet; 0x90; Receive packet with chars RxData
@@ -311,17 +309,17 @@ exports['API Frame Parsing'] = {
     var parsed = 0;
 
     xbeeAPI.on("frame_object", function(frame) {
-      if (parsed == 0) {
+      if (parsed === 0) {
         test.equal(frame.id, 0x7D, "Parse id");
-      } else if (parsed == 1) {
+      } else if (parsed === 1) {
         test.equal(frame.id, 0x7E, "Parse id");
-      } else if (parsed == 2) {
+      } else if (parsed === 2) {
         test.equal(frame.id, 0x62, "Parse id");
-      } else if (parsed == 3) {
+      } else if (parsed === 3) {
         test.equal(frame.id, 0x64, "Parse id");
-      } else if (parsed == 4) {
+      } else if (parsed === 4) {
         test.equal(frame.id, 0x65, "Parse id");
-      } else if (parsed == 5) {
+      } else if (parsed === 5) {
         test.equal(frame.id, 0x66, "Parse id");
         test.done();
       }

@@ -36,5 +36,9 @@
     "grunt-browserify": "~1.2.11",
     "grunt": "~0.4.1"
   },
-  "keywords": []
+  "keywords": [],
+  "dependencies": {
+    "buffer-builder": "git://github.com/prodatakey/node-buffer-builder",
+    "buffer-reader": "git://github.com/prodatakey/node-buffer-reader"
+  }
 }
