@@ -84,6 +84,7 @@ The following frame types are implemented:
 - 0x92: ZigBee IO Data Sample Rx Indicator (ZNet, ZigBee)
 - 0x94: XBee Sensor Read Indicator (AO=0) (ZNet, ZigBee)
 - 0x95: Node Identification Indicator (AO=0) (ZNet, ZigBee)
+- 0xA1: Route Record Indicator (ZigBee)
 
 ### NOT IMPLEMENTED YET
 These (more esoteric) frame types have not been implemented yet, [Open a new issue](https://github.com/jankolkmeier/xbee-api/issues/new) if you need something in particular: 
@@ -91,7 +92,6 @@ These (more esoteric) frame types have not been implemented yet, [Open a new iss
 - 0x21: Create Source Route (ZigBee)
 - 0x24: Register Joining Device (ZigBee)
 - 0xA0: Over-the-Air Firmware Update Status (ZigBee)
-- 0xA1: Route Record Indicator (ZigBee)
 - 0xA2: Device Authenticated Indicator (ZigBee)
 - 0xA3: Many-to-One Route Request Indicator (ZigBee)
 - 0xA4: Register Joining Device Status (ZigBee)
@@ -116,6 +116,9 @@ In the following a documentation of all class methods.
 
 #### xbeeAPI.buildFrame(frame)
 Returns an API frame (buffer) created from the passed frame object. See ***Creating frames from objects to write to the XBee*** for details on how these passed objects are specified.
+
+#### xbeeAPI.canParse(buffer)
+Returns whether the library implements a parser for the frame contained in the provided buffer. The buffer only needs to contain up to the frame type segment to determine if it can be parsed, but `parseFrame()` will need a complete frame.
 
 #### xbeeAPI.parseFrame(buffer)
 Parses and returns a frame object from the buffer passed. Note that the buffer must be a complete frame, starting with the start byte and ending with the checksum byte. See ***Objects created from received API Frames*** for details on how the retured objects are specified.
