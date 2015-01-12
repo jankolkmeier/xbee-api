@@ -68,6 +68,7 @@ The following frame types are implemented:
 - 0x08: AT Command (802.15.4, ZNet, ZigBee)
 - 0x09: AT Command Queue Parameter Value (802.15.4, ZNet, ZigBee)
 - 0x17: Remote Command Request (802.15.4, ZNet, ZigBee)
+- 0x21: Create Source Route (ZigBee)
 - 0x80: RX (Receive) Packet: 64-bit Address (802.15.4)
 - 0x81: RX (Receive) Packet: 16-bit Address (802.15.4)
 - 0x82: RX (Receive) Packet: 64-bit Address IO (802.15.4)
@@ -89,7 +90,6 @@ The following frame types are implemented:
 ### NOT IMPLEMENTED YET
 These (more esoteric) frame types have not been implemented yet, [Open a new issue](https://github.com/jankolkmeier/xbee-api/issues/new) if you need something in particular: 
 
-- 0x21: Create Source Route (ZigBee)
 - 0x24: Register Joining Device (ZigBee)
 - 0xA0: Over-the-Air Firmware Update Status (ZigBee)
 - 0xA2: Device Authenticated Indicator (ZigBee)
@@ -218,7 +218,7 @@ Transmit your own `data` to a remote node using a 16 bit address. This is for Se
 #### 0x11: Explicit Addressing ZigBee Command Frame (ZNet, ZigBee)
 ```javascript
 {
-    type: 0x10, // xbee_api.constants.FRAME_TYPE.ZIGBEE_TRANSMIT_REQUEST
+    type: 0x11, // xbee_api.constants.FRAME_TYPE.ZIGBEE_TRANSMIT_REQUEST
     id: 0x01, // optional, nextFrameId() is called per default
     destination64: "0013a200400a0127", // default is broadcast address
     destination16: "fffe", // default is "fffe" (unknown/broadcast)
@@ -232,6 +232,21 @@ Transmit your own `data` to a remote node using a 16 bit address. This is for Se
 }
 ```
 Allows ZigBee application layer fields (endpoint and cluster ID) to be specified for a data transmission. Similar to the ZigBee Transmit Request, but also requires ZigBee application layer addressing fields to be specified (endpoints, cluster ID, profile ID). An Explicit Addressing Request API frame causes the module to send data as an RF packet to the specified destination, using the specified source and destination endpoints, cluster ID, and profile ID.
+
+#### 0x21: Create Source Route (ZNet, ZigBee)
+```javascript
+{
+    type: 0x21, // xbee_api.constants.FRAME_TYPE.CREATE_SOURCE_ROUTE
+    destination64: "deadbeefcafebabe", // Must be a unicast address
+    destination16: "adad", // Must be a unicast address
+	addresses: [ // List of hops to destination (usually get these from route record indicator frames)
+		'babe', // Hop closes to destination
+		'beef',
+		'cafe'  // Hop closest to source
+	]
+}
+```
+This sets a source route for sending a packet using a hard-coded route. See the ZigBee documentation on using source routing.
 
 ### OBJECTS CREATED FORM RECEIVED API FRAMES
 Objects created from API frames that the XBee would recieve contain a `type` property that identifies the frame type. If the frame is a response to a query made earlier, the `id` that was used for that request is also included.
