@@ -34,7 +34,7 @@ exports['Main'] = {
     test.done();
   },
   'nextFrameId': function(test) {
-  	// Test if frameId actually increments... assuming we dont start near 254...
+    // Test if frameId actually increments... assuming we dont start near 254...
     test.expect(1);
     var xbeeAPI = new xbee_api.XBeeAPI();
     var frame = {
@@ -46,7 +46,7 @@ exports['Main'] = {
     var xbeeFrame = function(frame) {
         frame.id = xbeeAPI.nextFrameId();
         return frame.id;
-    }
+    };
     var fId1 = xbeeFrame(frame);
     var fId2 = xbeeFrame(frame);
     test.equal((fId1+1), fId2);
