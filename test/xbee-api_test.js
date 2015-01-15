@@ -33,6 +33,25 @@ exports['Main'] = {
 
     test.done();
   },
+  'nextFrameId': function(test) {
+  	// Test if frameId actually increments... assuming we dont start near 254...
+    test.expect(1);
+    var xbeeAPI = new xbee_api.XBeeAPI();
+    var frame = {
+      type: C.FRAME_TYPE.AT_COMMAND,
+      id: 0x52,
+      command: "NJ",
+      commandParameter: [],
+    };
+    var xbeeFrame = function(frame) {
+        frame.id = xbeeAPI.nextFrameId();
+        return frame.id;
+    }
+    var fId1 = xbeeFrame(frame);
+    var fId2 = xbeeFrame(frame);
+    test.equal((fId1+1), fId2);
+    test.done();
+  }
 };
 
 exports['API Frame building'] = { // These have to be tested both for AP=1 and 2
