@@ -30,8 +30,6 @@
   },
   "devDependencies": {
     "serialport": "~1.2.3",
-    "buffer-builder": "~0.2.0",
-    "buffer-reader": "~0.0.2",
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-nodeunit": "~0.2.0",
     "grunt-contrib-watch": "~0.4.0",
@@ -41,6 +39,6 @@
   "keywords": [],
   "dependencies": {
     "buffer-builder": "^0.2.0",
-    "buffer-reader": "git://github.com/prodatakey/node-buffer-reader"
+    "buffer-reader": "https://github.com/prodatakey/node-buffer-reader/archive/v0.0.3.tar.gz"
   }
 }
