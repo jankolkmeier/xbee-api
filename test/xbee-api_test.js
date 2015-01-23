@@ -128,6 +128,40 @@ exports['API Frame building'] = { // These have to be tested both for AP=1 and 2
     var xbeeAPI = new xbee_api.XBeeAPI();
     test.deepEqual(expected0, xbeeAPI.buildFrame(frame), "create raw frame");
     test.done();
+  },
+  'Keep Frame ID Zero': function(test) {
+    test.expect(1);
+
+    var frame = {
+      type: C.FRAME_TYPE.AT_COMMAND,
+      id: 0x00,
+      command: "NJ",
+      commandParameter: [],
+    };
+
+    // AT Command; 0x08; Queries ATNJ
+    var expected0 = new Buffer([ 0x7E, 0x00, 0x04, 0x08, 0x00, 0x4E, 0x4A, 0x5F]);
+
+    var xbeeAPI = new xbee_api.XBeeAPI();
+    test.deepEqual(expected0, xbeeAPI.buildFrame(frame), "create raw frame");
+    test.done();
+  },
+  'Assign ID When Missing': function(test) {
+    test.expect(1);
+    
+    var frame = {
+      type: C.FRAME_TYPE.AT_COMMAND,
+      command: "NJ",
+      commandParameter: [],
+    };
+
+    var xbeeAPI = new xbee_api.XBeeAPI();
+    var firstId = xbeeAPI.nextFrameId();
+    
+    var buf = xbeeAPI.buildFrame(frame);
+
+    test.equal(firstId + 1, buf[4], "create raw frame");
+    test.done();
   }
 };
 
