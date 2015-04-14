@@ -247,6 +247,26 @@ exports['API Frame Parsing'] = {
     parser(null, rawFrame);
   }, 
 
+  'Leading Garbage': function(test) {
+    test.expect(4);
+    var xbeeAPI = new xbee_api.XBeeAPI();
+    var parser = xbeeAPI.rawParser();
+    xbeeAPI.once("frame_object", function(frame) {
+      test.equal(frame.remote64, '0013a20040522baa', "Parse remote64");
+      test.equal(frame.remote16, '7d84', "Parse remote16");
+      test.equal(frame.receiveOptions, 1, "Parse receive options");
+      test.deepEqual(frame.data, new Buffer([ 0x52, 0x78, 0x44, 0x61, 0x74, 0x61 ]));
+      test.done();
+    });
+    // Receive Packet; 0x90; Receive packet with chars RxData
+    var garbage = [];
+    for (var i=0; i<520; i++) garbage.push(0x00);
+    var garbageBuffer = new Buffer(garbage);
+    var rawFrame = new Buffer([ 0x7E, 0x00, 0x12, 0x90, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x7D, 0x84, 0x01, 0x52, 0x78, 0x44, 0x61, 0x74, 0x61, 0x0D ]);
+    var garbagedFrame = Buffer.concat([garbageBuffer, rawFrame]);
+    parser(null, garbagedFrame);
+  }, 
+
   'Receive Packet 16-bit IO': function(test) {
     test.expect(3);
     var xbeeAPI = new xbee_api.XBeeAPI({api_mode:1});
