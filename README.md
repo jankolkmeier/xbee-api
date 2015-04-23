@@ -318,10 +318,10 @@ This frame contains general data (such as text data) received from remote nodes.
 	type: 0x90, // xbee_api.constants.FRAME_TYPE.ZIGBEE_EXPLICIT_RX
 	remote64: "0013a20040522baa",
 	remote16: "7d84",
-        sourceEndpoint: "e8",
-        destinationEndpoint: "e8",
-        clusterId: "0011",
-        profileId: "c105",
+	sourceEndpoint: "e8",
+	destinationEndpoint: "e8",
+	clusterId: "0011",
+	profileId: "c105",
 	receiveOptions: 0x01,
 	data: [ 0x52, 0x78, 0x44, 0x61, 0x74, 0x61 ]
 }
