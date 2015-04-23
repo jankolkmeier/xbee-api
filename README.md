@@ -313,7 +313,19 @@ These statuses give information about the general operation of the XBee. See the
 This frame contains general data (such as text data) received from remote nodes.
 
 #### 0x91: ZigBee Explicit Rx Indicator (AO=1) (ZNet, ZigBee)
-See *0x90: ZigBee Receive Packet (AO=0) (ZNet, ZigBee)* above.
+```javascript
+{
+	type: 0x90, // xbee_api.constants.FRAME_TYPE.ZIGBEE_EXPLICIT_RX
+	remote64: "0013a20040522baa",
+	remote16: "7d84",
+	sourceEndpoint: "e8",
+	destinationEndpoint: "e8",
+	clusterId: "0011",
+	profileId: "c105",
+	receiveOptions: 0x01,
+	data: [ 0x52, 0x78, 0x44, 0x61, 0x74, 0x61 ]
+}
+```
 
 #### 0x92: ZigBee IO Data Sample Rx Indicator (ZNet, ZigBee)
 ```javascript
