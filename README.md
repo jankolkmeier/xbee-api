@@ -97,6 +97,9 @@ These (more esoteric) frame types have not been implemented yet, [Open a new iss
 - 0xA4: Register Joining Device Status (ZigBee)
 - 0xA5: Join Notification Status (ZigBee)
 
+### KNOWN ISSUES
+Enabling encryption with series 1 XBees / 802.15.4 devices causes some inexplicable problems - see [Issue #12](https://github.com/jankolkmeier/xbee-api/issues/12).
+
 ## DOCUMENTATION
 
 ### THE XBeeAPI CLASS
