@@ -265,6 +265,25 @@ exports['API Frame Parsing'] = {
     var rawFrame = new Buffer([ 0x7E, 0x00, 0x12, 0x90, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x7D, 0x84, 0x01, 0x52, 0x78, 0x44, 0x61, 0x74, 0x61, 0x0D ]);
     var garbagedFrame = Buffer.concat([garbageBuffer, rawFrame]);
     parser(null, garbagedFrame);
+  },
+  'Receive Packet with AO=1': function(test) {
+    test.expect(8);
+    var xbeeAPI = new xbee_api.XBeeAPI();
+    var parser = xbeeAPI.rawParser();
+    xbeeAPI.once("frame_object", function(frame) {
+      test.equal(frame.remote64, '0013a20040c401a9', "Parse remote64");
+      test.equal(frame.remote16, '0000', "Parse remote16");
+      test.equal(frame.sourceEndpoint, 'e8', 'Source Endpoint');
+      test.equal(frame.destinationEndpoint, 'e8', 'Destination Endpoint');
+      test.equal(frame.clusterId, '0011', 'Cluster Id');
+      test.equal(frame.profileId, 'c105', 'Profile Id');
+      test.equal(frame.receiveOptions, 1, "Parse receive options");
+      test.deepEqual(frame.data, new Buffer([0x74, 0x65, 0x73, 0x74, 0x20, 0x6D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65]));
+      test.done();
+    });
+    // Receive Packet; 0x90; Receive packet with chars RxData
+    var rawFrame = new Buffer([0x7E, 0x00, 0x1E, 0x91, 0x00, 0x13, 0xA2, 0x00, 0x40, 0xC4, 0x01, 0xA9, 0x00, 0x00, 0xE8, 0xE8, 0x00, 0x11, 0xC1, 0x05, 0x01, 0x74, 0x65, 0x73, 0x74, 0x20, 0x6D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x9E]);
+    parser(null, rawFrame);
   }, 
 
   'Receive Packet 16-bit IO': function(test) {
