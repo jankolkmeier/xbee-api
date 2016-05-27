@@ -219,6 +219,25 @@ exports['API Frame Parsing'] = {
     var rawFrame = new Buffer([ 0x7E, 0x00, 0x05, 0x88, 0x01, 0x4E, 0x44, 0x00, 0xE4 ]);
     parser(null, rawFrame);
   },
+  'AT Command Responses, ND AT Command with data': function(test) {
+    test.expect(6);
+    var xbeeAPI = new xbee_api.XBeeAPI({api_mode: 2});
+    var parser = xbeeAPI.rawParser();
+
+    xbeeAPI.once("frame_object", function(frame) { // frame0
+      test.equal(frame.id, 0x01, "Parse frameid");
+      test.equal(frame.command, "ND", "Parse command");
+      test.equal(frame.commandStatus, 0, "Parse command status");
+      test.equal(frame.nodeIdentification.remote16, 'fffe');
+      test.equal(frame.nodeIdentification.remote64, '0013a20040d814a8');
+      test.equal(frame.nodeIdentification.nodeIdentifier, '4d');
+      test.done();
+    });
+
+    // AT Command Response; 0x88; ATND [OK] (with data)
+    var rawFrame = new Buffer([ 0x7E, 0x00, 0x12, 0x88, 0x01, 0x4E, 0x44, 0x00, 0xFF, 0xFE, 0x00, 0x7D, 0x33, 0xA2, 0x00, 0x40, 0xD8, 0x14, 0xA8, 0x34, 0x64, 0x00, 0xC6 ]);
+    parser(null, rawFrame);
+  },
   'Transmit Status': function(test) {
     test.expect(5);
     var xbeeAPI = new xbee_api.XBeeAPI();
