@@ -1,7 +1,7 @@
 {
   "name": "xbee-api",
   "description": "Node.js and Chrome communicate with XBee/ZigBee devices in API mode",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "homepage": "https://github.com/jankolkmeier/xbee-api",
   "author": {
     "name": "Jan Kolkmeier",
