@@ -18,18 +18,18 @@
   "licenses": "MIT",
   "main": "lib/xbee-api",
   "engines": {
-    "node": ">= 6.0.0"
+    "node": ">=6.0.0"
   },
   "scripts": {
     "test": "grunt nodeunit"
   },
   "devDependencies": {
-    "serialport": "~2.0.0",
-    "grunt-contrib-jshint": "~0.6.0",
-    "grunt-contrib-nodeunit": "~0.2.0",
-    "grunt-contrib-watch": "~0.4.0",
-    "grunt-browserify": "~1.2.11",
-    "grunt": "~0.4.1"
+    "serialport": "~4.0.0",
+    "grunt-contrib-jshint": "~1.0.0",
+    "grunt-contrib-nodeunit": "~1.0.0",
+    "grunt-contrib-watch": "~1.0.0",
+    "grunt-browserify": "~5.0.0",
+    "grunt": "~1.0.1"
   },
   "keywords": [],
   "dependencies": {
