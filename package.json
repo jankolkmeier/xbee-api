@@ -18,7 +18,7 @@
   "licenses": "MIT",
   "main": "lib/xbee-api",
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=0.10.0"
   },
   "scripts": {
     "test": "grunt nodeunit"
@@ -34,6 +34,7 @@
   "keywords": [],
   "dependencies": {
     "buffer-builder": "^0.2.0",
-    "buffer-reader": "https://github.com/prodatakey/node-buffer-reader/archive/v0.0.3.tar.gz"
+    "buffer-reader": "https://github.com/prodatakey/node-buffer-reader/archive/v0.0.3.tar.gz",
+    "safe-buffer": "~5.0.1"
   }
 }
