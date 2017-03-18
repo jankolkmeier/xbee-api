@@ -391,13 +391,16 @@ exports['API Frame Parsing'] = {
       test.equal(frame.receiveOptions, 194, "Parse receive options");
       test.equal(frame.numSamples, 1, "Parse number of samples");
       test.deepEqual(frame.digitalSamples, {}, "Parse digital samples");
-      test.deepEqual(frame.analogSamples, { AD2: 1200, AD3: 1200 }, "Parse analog samples");
+      test.deepEqual(frame.analogSamples, {
+        "AD2": 1200,
+        "AD3": 1200
+      }, "Parse analog samples");
       test.done()
     });
     var rawFrame = new Buffer([ 0x7e, 0x00, 0x14, 0x92, 0x00, 0x13, 0xa2, 0x00, 0x41, 0x5b, 0x7e, 0xd6, 0xff, 0xfe, 0xc2, 0x01, 0x00, 0x00, 0x0c, 0x03, 0xff, 0x03, 0xff, 0xf8]);
     parser(null, rawFrame);
   },
-  'Multiple Frames': function(test) { // AP=1
+  'Multiple Frames In One Buffer': function(test) { // AP=1
     test.expect(12);
     var xbeeAPI = new xbee_api.XBeeAPI({ api_mode: 1 });
     var parser = xbeeAPI.rawParser();
@@ -405,25 +408,34 @@ exports['API Frame Parsing'] = {
 
     xbeeAPI.on("frame_object", function(frame) {
       if (parsed === 0) {
-        test.equal(frame.remote64, '0013a200415b7ed6', "Parse remote64");
-        test.equal(frame.remote16, 'fffe', "Parse remote16");
-        test.equal(frame.receiveOptions, 194, "Parse receive options");
+        test.equal(frame.remote64, '0013a20040522baa', "Parse remote64");
+        test.equal(frame.remote16, '7d84', "Parse remote16");
+        test.equal(frame.receiveOptions, 1, "Parse receive options");
         test.equal(frame.numSamples, 1, "Parse number of samples");
-        test.deepEqual(frame.digitalSamples, {}, "Parse digital samples");
-        test.deepEqual(frame.analogSamples, { AD2: 1200, AD3: 1200 }, "Parse analog samples");
+        test.deepEqual(frame.digitalSamples, {
+          "DIO2": 1,
+          "DIO3": 0,
+          "DIO4": 1
+        }, "Parsing digital samples");
+        test.deepEqual(frame.analogSamples, {
+          "AD1": 644
+        }, "Parse analog samples");
       } else if (parsed === 1) {
         test.equal(frame.remote64, '0013a20041550883', "Parse remote64");
         test.equal(frame.remote16, 'fffe', "Parse remote16");
         test.equal(frame.receiveOptions, 194, "Parse receive options");
         test.equal(frame.numSamples, 1, "Parse number of samples");
         test.deepEqual(frame.digitalSamples, {}, "Parse digital samples");
-        test.deepEqual(frame.analogSamples, { AD2: 1200, AD3: 1200 }, "Parse analog samples");
+        test.deepEqual(frame.analogSamples, {
+          "AD2": 1200,
+          "AD3": 1200
+        }, "Parse analog samples");
         test.done();
       }
       parsed++;
     });
 
-    var rawFrames = new Buffer([ 0x7e, 0x00, 0x14, 0x92, 0x00, 0x13, 0xa2, 0x00, 0x41, 0x5b, 0x7e, 0xd6, 0xff, 0xfe, 0xc2, 0x01, 0x00, 0x00, 0x0c, 0x03, 0xff, 0x03, 0xff, 0xf8, 0x7e, 0x00, 0x14, 0x92, 0x00, 0x13, 0xa2, 0x00, 0x41, 0x55, 0x08, 0x83, 0xff, 0xfe, 0xc2, 0x01, 0x00, 0x00, 0x0c, 0x03, 0xff, 0x03, 0xff, 0xc7 ]);
+    var rawFrames = new Buffer([ 0x7E, 0x00, 0x14, 0x92, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x7D, 0x84, 0x01, 0x01, 0x00, 0x1C, 0x02, 0x00, 0x14, 0x02, 0x25, 0xF5,  0x7E, 0x00, 0x14, 0x92, 0x00, 0x13, 0xA2, 0x00, 0x41, 0x55, 0x08, 0x83, 0xFF, 0xFE, 0xC2, 0x01, 0x00, 0x00, 0x0C, 0x03, 0xFF, 0x03, 0xFF, 0xC7 ]);
     parser(null, rawFrames);
   },
   'XBee Sensor Read Indicator': function(test) {
