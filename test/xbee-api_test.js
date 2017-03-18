@@ -379,7 +379,7 @@ exports['API Frame Parsing'] = {
     var rawFrame = new Buffer([ 0x7E, 0x00, 0x14, 0x92, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x7D, 0x84, 0x01, 0x01, 0x00, 0x1C, 0x02, 0x00, 0x14, 0x02, 0x25, 0xF5 ]);
     parser(null, rawFrame);
   },
-  'AP 1 Containing Start Byte': function(test) {
+  'AP=1 Containing Start Byte': function(test) {
     test.expect(6);
     var xbeeAPI = new xbee_api.XBeeAPI({ api_mode: 1 });
     var parser = xbeeAPI.rawParser();
@@ -397,7 +397,7 @@ exports['API Frame Parsing'] = {
     var rawFrame = new Buffer([ 0x7e, 0x00, 0x14, 0x92, 0x00, 0x13, 0xa2, 0x00, 0x41, 0x5b, 0x7e, 0xd6, 0xff, 0xfe, 0xc2, 0x01, 0x00, 0x00, 0x0c, 0x03, 0xff, 0x03, 0xff, 0xf8]);
     parser(null, rawFrame);
   },
-  'Multiple IO Data Sample Rx': function(test) {
+  'Multiple Frames': function(test) { // AP=1
     test.expect(12);
     var xbeeAPI = new xbee_api.XBeeAPI({ api_mode: 1 });
     var parser = xbeeAPI.rawParser();
