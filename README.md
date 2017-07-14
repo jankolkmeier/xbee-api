@@ -10,7 +10,7 @@ For details on supported firmwares and devices, see [here](#supported-firmwares-
 [xbee-api](http://github.com/jankolkmeier/xbee-api/) does *not* take care of the serial connection
 itself, but it is easy to hook it up to modules such as [serialport](https://github.com/voodootikigod/node-serialport/).
 
-Note that higher-level abstraction as currently provided in [svd-xbee](https://github.com/jankolkmeier/svd-xbee/) is not part of this module anymore. Consider 101100's promise-based [xbee-promise](https://github.com/101100/xbee-promise) module! Some work has been done towards more abstract, stream-based modules:  [xbee-stream](https://github.com/jankolkmeier/xbee-stream/) and [xbee-stream-nodes](https://github.com/jankolkmeier/xbee-stream-nodes/) (both WiP)
+Note that higher-level abstraction as currently provided in the now outdated [svd-xbee](https://github.com/jankolkmeier/svd-xbee/) is not part of this module anymore. Consider 101100's promise-based [xbee-promise](https://github.com/101100/xbee-promise) or Reactive Extensions based [xbee-rx](https://github.com/101100/xbee-rx) module! Some work has been done towards more abstract, stream-based modules:  [xbee-stream](https://github.com/jankolkmeier/xbee-stream/) and [xbee-stream-nodes](https://github.com/jankolkmeier/xbee-stream-nodes/) (both just prototypes).
 
 ## GETTING STARTED
 Install the module with: **[npm](https://npmjs.org/) install xbee-api**
@@ -53,8 +53,8 @@ This module supports the [802.15.4](http://en.wikipedia.org/wiki/IEEE_802.15.4) 
 
 From the XBee family, Series 1 (802.15.4) and Series 2 (ZNet 2.5 and ZigBee) modules are supported, since they come with firmwares talking either one of these stacks.
 
-These documents are used as reference: [90000976.pdf (for Series 2)](http://ftp1.digi.com/support/documentation/90000976.pdf) and 
-[90000982.pdf (for Series 1)](http://ftp1.digi.com/support/documentation/90000982.pdf). Some frame types are 802.15.4, ZNet or ZigBee specific. Be sure to use the correct ones for your module (as described in the documents and the list below). Also check out this [utility from Digi](http://ftp1.digi.com/support/utilities/digi_apiframes2.htm).
+These documents are used as reference: [90000976.pdf (for Series 2)](https://www.digi.com/resources/documentation/digidocs/PDFs/90000976.pdf) and 
+[90000982.pdf (for Series 1)](https://www.digi.com/resources/documentation/digidocs/pdfs/90000982.pdf). Some frame types are 802.15.4, ZNet or ZigBee specific. Be sure to use the correct ones for your module (as described in the documents and the list below). Also check out this [utility from Digi](http://docs.digi.com/display/XCTU/Frames+generator+tool).
 
 Modules must run in API mode. Both AP=1 (without escaping) and AP=2 (with escaping) modes are supported (set the api_mode parameter accordingly).
 
