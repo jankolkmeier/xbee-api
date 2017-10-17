@@ -109,13 +109,18 @@ To get an instance `xbeeAPI` of the `XBeeAPI` class:
 var xbee_api = require('xbee-api');
 var xbeeAPI = new xbee_api.XBeeAPI({
     // default options:
-    api_mode: 1,             // [1, 2]; 1 is default, 2 is with escaping (set ATAP=2)
-    module: "Any",           // ["802.15.4", "ZNet", "ZigBee", "Any"]; This does nothing, yet!
-    raw_frames: false,       // [true, false]; If set to true, only raw byte frames are
-                             // emitted (after validation) but not parsed to objects. 
-    convert_adc: true,       // [true, false]; If false, do not convert adc value to millivolt.
-    vref_adc: 1200,          // (int); Set the value to convert adc value to millivolt.
-    parser_buffer_size: 512  // (int); size of the package buffer. 512 could
+    api_mode: 1,              // [1, 2]; 1 is default, 2 is with escaping (set ATAP=2)
+    module: "Any",            // ["802.15.4", "ZNet", "ZigBee", "Any"]; This does nothing, yet!
+    raw_frames: false,        // [true, false]; If set to true, only raw byte frames are
+                              //   emitted (after validation) but not parsed to objects. 
+    convert_adc: true,        // [true, false]; If false, do not convert adc value to millivolt.
+    vref_adc: 1200,           // (int); Set the value to convert adc value to millivolt.
+    parser_buffer_size: 512,  // (int); size of the package parser buffer. 512 co
+                              //   when receiving A LOT of packets, you might want to decrease 
+                              //   this to a smaller value (but typically not less than 128)
+    builder_buffer_size: 512  // (int); size of the package builder buffer. 
+                              //   when sending A LOT of packets, you might want to decrease
+                              //   this to a smaller value (but typically not less than 128)
 });
 ```
 In the following a documentation of all class methods.
