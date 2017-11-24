@@ -15,10 +15,10 @@
   "bugs": {
     "url": "https://github.com/jankolkmeier/xbee-api/issues"
   },
-  "licenses": "MIT",
+  "license": "MIT",
   "main": "lib/xbee-api",
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=4.0.0"
   },
   "scripts": {
     "test": "grunt nodeunit"
