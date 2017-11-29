@@ -195,10 +195,10 @@ exports['Stream Interface'] = {
       if (packets==3) test.done();
     };
     mockserialR._read = function(size){};
-    mockserialR.pipe(xbeeAPI.decoder);
-    xbeeAPI.encoder.pipe(mockserialW);
+    mockserialR.pipe(xbeeAPI.parser);
+    xbeeAPI.builder.pipe(mockserialW);
 
-    xbeeAPI.decoder.on('data', function(frame) {
+    xbeeAPI.parser.on('data', function(frame) {
       if (frame.id == 0x01) {
         test.equal(frame.remote16, "7d84", "Parse remote16");
         test.equal(frame.transmitRetryCount, 0, "Parse retry count");
@@ -216,7 +216,7 @@ exports['Stream Interface'] = {
       if (packets==3) test.done();
     });
 
-    xbeeAPI.encoder.write(send_frame);
+    xbeeAPI.builder.write(send_frame);
     mockserialR.emit('data', rawFrame0);
     mockserialR.emit('data', rawFrame1);
     mockserialR.emit('end');
