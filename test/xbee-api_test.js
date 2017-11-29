@@ -165,39 +165,61 @@ exports['API Frame building'] = { // These have to be tested both for AP=1 and 2
   }
 };
 
-
-exports['Transform Stream'] = {
-  'Receive Packets': function(test) {
-    test.expect(5);
-    var xbeeAPI = new xbee_api.XBeeAPI({api_mode: 2});
-    var parser = xbeeAPI.newStream();
-
-    var mockserial = new require('stream').Readable();
-    mockserial._read = function(size){};
-    mockserial.pipe(parser);
+exports['Stream Interface'] = {
+  'Encode Decode': function(test) {
+    test.expect(10);
+    var xbeeAPI = new xbee_api.XBeeAPI();
     var packets = 0;
 
-    parser.on('data', function(frame) {
+    var send_frame = {
+      type: C.FRAME_TYPE.ZIGBEE_TRANSMIT_REQUEST,
+      id: 0x01,
+      destination64: "0013a200400a0127",
+      destination16: "fffe",
+      broadcastRadius: 0x00,
+      options: 0x00,
+      data: "TxData0A"
+    };
+    // Transmit request; 0x10; sends chars: TxData0A (AP=1)
+    var expected0 = new Buffer([ 0x7E, 0x00, 0x16, 0x10, 0x01, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x0A, 0x01, 0x27, 0xFF, 0xFE, 0x00, 0x00, 0x54, 0x78, 0x44, 0x61, 0x74, 0x61, 0x30, 0x41, 0x13 ]);
+    // Remote Command Response; 0x97; ATSL [OK] 40522BAA
+    var rawFrame0 = new Buffer([ 0x7E, 0x00, 0x13, 0x97, 0x55, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0x7D, 0x84, 0x53, 0x4C, 0x00, 0x40, 0x52, 0x2B, 0xAA, 0xF0 ]);
+    // ZigBee Transmit Status; 0x8B; 0 retransmit, Success, Address Discovery
+    var rawFrame1 = new Buffer([ 0x7E, 0x00, 0x07, 0x8B, 0x01, 0x7D, 0x84, 0x00, 0x00, 0x01, 0x71 ]);
+
+    var mockserialR = new require('stream').Readable();
+    var mockserialW = new require('stream').Writable();
+    mockserialW._write = function(chunk, enc, cb) {
+      test.deepEqual(expected0, chunk, "create raw frame");
+      packets++;
+      if (packets==3) test.done();
+    };
+    mockserialR._read = function(size){};
+    mockserialR.pipe(xbeeAPI.decoder);
+    xbeeAPI.encoder.pipe(mockserialW);
+
+    xbeeAPI.decoder.on('data', function(frame) {
       if (frame.id == 0x01) {
-          test.equal(frame.command, "ND", "Parse command");
-          test.equal(frame.commandStatus, 0, "Parse command status");
-          test.equal(frame.nodeIdentification.remote16, 'fffe');
-          test.equal(frame.nodeIdentification.remote64, '0013a20040d814a8');
-          test.equal(frame.nodeIdentification.nodeIdentifier, '4d');
-          packets++;
-      } else if (frame.id == 0x7D) {
-          packets++;
+        test.equal(frame.remote16, "7d84", "Parse remote16");
+        test.equal(frame.transmitRetryCount, 0, "Parse retry count");
+        test.equal(frame.deliveryStatus, 0, "Parse delivery status");
+        test.equal(frame.discoveryStatus, 1, "Parse discovery status");
+        packets++;
+      } else if (frame.id == 0x55) {
+        test.equal(frame.remote64, '0013a20040522baa', "Parse remote64");
+        test.equal(frame.remote16, '7d84', "Parse remote16");
+        test.equal(frame.command, "SL", "Parse command");
+        test.equal(frame.commandStatus, 0, "Parse command status");
+        test.deepEqual(frame.commandData, new Buffer([ 0x40, 0x52, 0x2b, 0xaa ]));
+        packets++;
       }
-      if (packets==2) test.done();
+      if (packets==3) test.done();
     });
 
-    // ZigBee Transmit Status; 0x8B; here, frameId happens to be 7D and needs to be escaped
-    var rawFrame0 = new Buffer([ 0x7e, 0x0, 0x7, 0x8b, 0x7d, 0x5d, 0x2a, 0x6a, 0x0, 0x0, 0x0, 0x63 ]);
-    // AT Command Response; 0x88; ATND [OK] (with data)
-    var rawFrame1 = new Buffer([ 0x7E, 0x00, 0x12, 0x88, 0x01, 0x4E, 0x44, 0x00, 0xFF, 0xFE, 0x00, 0x7D, 0x33, 0xA2, 0x00, 0x40, 0xD8, 0x14, 0xA8, 0x34, 0x64, 0x00, 0xC6 ]);
-    mockserial.emit('data', rawFrame0);
-    mockserial.emit('data', rawFrame1);
-    mockserial.emit('end');
+    xbeeAPI.encoder.write(send_frame);
+    mockserialR.emit('data', rawFrame0);
+    mockserialR.emit('data', rawFrame1);
+    mockserialR.emit('end');
   } 
 }
 
