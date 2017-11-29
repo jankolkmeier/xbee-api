@@ -495,12 +495,10 @@ C.DEVICE_TYPE[0x02] // "End Device (0x02)"
 Please refer to `lib/constants.js` for a more complete list, and your module's documentation for more explanation.
 
 ## EXAMPLES
-To combine with [serialport](https://github.com/voodootikigod/node-serialport/), we use the rawParser(). Make sure to set your baudrate, AP mode and COM port. 
+To combine with [serialport](https://github.com/node-serialport/node-serialport/), using the streaming API, we use the builder and parser transform streams. 
 ```javascript
-var util = require('util');
 var SerialPort = require('serialport').SerialPort;
 var xbee_api = require('xbee-api');
-
 var C = xbee_api.constants;
 
 var xbeeAPI = new xbee_api.XBeeAPI({
@@ -509,21 +507,23 @@ var xbeeAPI = new xbee_api.XBeeAPI({
 
 var serialport = new SerialPort("COM19", {
   baudrate: 57600,
-  parser: xbeeAPI.rawParser()
 });
 
+serialport.pipe(xbeeAPI.parser);
+xbeeAPI.builder.pipe(serialport);
+
 serialport.on("open", function() {
-  var frame_obj = { // AT Request to be sent to 
+  var frame_obj = { // AT Request to be sent
     type: C.FRAME_TYPE.AT_COMMAND,
     command: "NI",
     commandParameter: [],
   };
 
-  serialport.write(xbeeAPI.buildFrame(frame_obj));
+  xbeeAPI.builder.write(frame_obj);
 });
 
 // All frames parsed by the XBee will be emitted here
-xbeeAPI.on("frame_object", function(frame) {
+xbeeAPI.parser.on("data", function(frame) {
 	console.log(">>", frame);
 });
 ```
@@ -540,10 +540,10 @@ var frame_obj = {
 	commandParameter: []
 };
 
-serialport.write(xbeeAPI.buildFrame(frame_obj));
+xbeeAPI.builder.write(frame_obj);
 
 // All frames parsed by the XBee will be emitted here
-xbeeAPI.on("frame_object", function(frame) {
+xbeeAPI.parser.on("data", function(frame) {
 	if (frame.id == frameId &&
 	    frame.type == C.FRAME_TYPE.AT_COMMAND_RESPONSE) {
 		// This frame is definitely the response!
